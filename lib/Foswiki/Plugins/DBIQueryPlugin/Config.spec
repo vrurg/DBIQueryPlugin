@@ -1,0 +1,3 @@
+# ---+ Extensions
+# ---++ DBIQueryPlugin
+1;
