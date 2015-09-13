@@ -70,6 +70,10 @@ use warnings;
 
 use Foswiki::Func    ();    # The plugins API
 use Foswiki::Plugins ();    # For the API version
+use DBI;
+use Error qw(:try);
+use CGI qw(:html2);
+use Carp qw(longmess);
 
 # $VERSION is referred to by Foswiki, and is the only global variable that
 # *must* exist in this package. For best compatibility, the simple quoted decimal
