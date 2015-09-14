@@ -5,6 +5,7 @@ package Foswiki::Plugins::DBIQueryPlugin;
 # Always use strict to enforce variable scoping
 use strict;
 use warnings;
+use v5.10;
 
 use Foswiki::Func    ();    # The plugins API
 use Foswiki::Plugins ();    # For the API version
@@ -61,7 +62,7 @@ our $SHORTDESCRIPTION =
 # entries so they can be used with =configure=.
 our $NO_PREFS_IN_TOPIC = 1;
 
-my ( $topic, $web, $user, $installWeb );
+my ( $topic, $web, $user, $installWeb, %queries );
 
 sub message_prefix {
     my @call = caller(2);
@@ -173,8 +174,8 @@ sub query_params {
 }
 
 sub newQID {
-    $query_id++;
-    return "DBI_CONTENT$query_id";
+    state $query_id = 0;
+    return "DBI_CONTENT" . $query_id++;
 }
 
 sub registerQuery {
@@ -970,7 +971,7 @@ sub postRenderingHandler {
     #    # as if it was passed by reference; for example:
     #    # $_[0] =~ s/SpecialString/my alternative/ge;
 
-    dprint "- ${pluginName}::endRenderingHandler( $web.$topic )";
+    dprint "endRenderingHandler( $web.$topic )";
 
     $_[0] =~ s/$protectStart(.*?)$protectEnd/&unprotectValue($1)/ges;
 }
