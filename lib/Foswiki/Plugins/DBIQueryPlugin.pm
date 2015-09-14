@@ -556,6 +556,43 @@ sub handleQueries {
     }
 }
 
+sub processPage
+{
+    state $level = 0;
+
+    $level++;
+    dprint "### $level\n\n";
+
+    # This is the place to define customized tags and variables
+    # Called by Foswiki::handleCommonTags, after %INCLUDE:"..."%
+
+    # do custom extension rule, like for example:
+    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
+    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
+    my $doHandle = 0;
+    $_[0] =~ s/%DBI_VERSION%/$VERSION/gs;
+    if ($_[0] =~ s/%DBI_DO{(.*?)}%(?:(.*?)%DBI_DO%)?/&storeDoQuery($1, $2)/ges) {
+        $doHandle = 1;
+    }
+    $_[0] =~ s/\%DBI_CODE{(.*?)}%(.*?)\%DBI_CODE%/&dbiCode($1, $2)/ges;
+    if ($_[0] =~ s/%DBI_QUERY{(.*?)}%(.*?)%DBI_QUERY%/&storeQuery($1, $2)/ges) {
+        $doHandle = 1;
+    }
+    if ($_[0] =~ s/%DBI_CALL{(.*?)}%/&storeCallQuery($1)/ges) {
+        $doHandle = 1;
+    }
+    if ($doHandle) {
+        handleQueries;
+        $_[0] =~ s/%(DBI_CONTENT\d+)%/$queries{$1}{result}/ges;
+    }
+
+    # Do not disconnect from databases if processing inclusions.
+
+    $level--;
+
+    db_disconnect if $level < 1;
+}
+
 =begin TML
 
 ---++ initPlugin($topic, $web, $user) -> $boolean
