@@ -1,0 +1,41 @@
+%META:TOPICINFO{author="VadimBelman" date="1434650530" format="1.1" version="1"}%
+%META:TOPICPARENT{name="Macros"}%
+---+ DBI_QUERY -- example macro tag
+The =%<nop>DBI_QUERY%= variable is handled by the DBIQueryPlugin
+
+Each query consist of two parts: a query statement (=SELECT=) and output formatting filters. SQL statement starts just after the leading =%<nop>DBI_QUERY{...}%= declaration. The filters are defined by =.header=, =.body=, and =.footer= keywords each starting at the beginning of line.  Their meaning shall be obvious from their name:
+
+|*Declaration*|*Description*|
+|=.header=|It is prepended to the query output once.|
+|=.body=|It is repeated for each row of data being fetched from the database.|
+|=.footer=|It is appended to the query output.|
+
+Read more on how DBIQueryPlugin works in order to get more detailed explanation of the meaning of each syntax element.
+
+---++ Parameters
+
+|*Parameter*|*Description*|*Default*|*Required*|
+|"db_identifier"|Database ID as defined in the plugin configuration. See [[#PluginConfig][plugin configuration]] section.|_none_|required|
+|subquery="name"|Defines a subquery which does not produce immediate result but could be used from inside another query|_none_|optional|
+|unquoted="col1 col2 ..."|List of columns to be left unquoted in the output. Read more in [[#ValueQuoting][Quoting of Values]] section.|_none_|optional|
+|protected="col1 col2 ..."|List of columns to be protected from processing by Foswiki engine.|_none_|optional|
+
+A small note on =protected= parameter. Say, one has an arbitrary data in a displayed column which could contain any kind of text strings. What happens if a %WIKITOOLNAME% variable is found in a string? It gets expanded by %WIKITOOLNAME%, for sure. Adding this columns to the =protected= list prevents the expansion. Precisely saying, the whole purpose of protection is displaying of data as is, without any modification.
+
+---++ Examples
+
+<pre>
+%<nop>DBI_QUERY{"db_identifier" ...}%
+SELECT ...
+.header
+head
+.body
+%column%
+%<nop>DBI_SUBQUERY{"name"}%
+.footer
+footer
+%DBI_QUERY%
+</pre>
+%STOPINCLUDE%
+---++ Related
+DBIQueryPlugin
