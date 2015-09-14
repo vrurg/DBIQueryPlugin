@@ -45,7 +45,8 @@ our $VERSION = '1.05';
 our $RELEASE = '15 Sep 2015';
 
 # One line description of the module
-our $SHORTDESCRIPTION = 'This plugin is intended to provide TWiki with ability to make complex database requests using DBI Perl module.';
+our $SHORTDESCRIPTION =
+'This plugin is intended to provide TWiki with ability to make complex database requests using DBI Perl module.';
 
 # You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use
 # preferences set in the plugin topic. This is required for compatibility
@@ -60,26 +61,26 @@ our $SHORTDESCRIPTION = 'This plugin is intended to provide TWiki with ability t
 # entries so they can be used with =configure=.
 our $NO_PREFS_IN_TOPIC = 1;
 
-sub message_prefix
-{
+sub message_prefix {
     my @call = caller(2);
-    my $line = (caller(1))[2];
+    my $line = ( caller(1) )[2];
     return "- " . $call[3] . "( $web.$topic )\:$line ";
 }
 
-sub warning(@)
-{
-    return Foswiki::Func::writeWarning( message_prefix() . join("", @_) );
+sub warning(@) {
+    return Foswiki::Func::writeWarning( message_prefix() . join( "", @_ ) );
 }
 
-sub dprint(@)
-{
-    return Foswiki::Func::writeDebug( message_prefix() . join("", @_) ) if $debug;
+sub dprint(@) {
+    return Foswiki::Func::writeDebug( message_prefix() . join( "", @_ ) )
+      if $debug;
 }
 
-sub wikiErrMsg
-{
-    return "<strong>\%RED\%<pre>" . join("", @_) . "</pre>\%ENDCOLOR\%</strong>";
+sub wikiErrMsg {
+    return
+        "<strong>\%RED\%<pre>"
+      . join( "", @_ )
+      . "</pre>\%ENDCOLOR\%</strong>";
 }
 
 =begin TML
@@ -92,8 +93,8 @@ Replaces all newlins with =%<nop>BR%= thus preventing an arbitrary text data man
 Wiki formatting. For instance, it allows inserting multiline texts into a table cell.
 
 =cut
-sub nl2br
-{
+
+sub nl2br {
     $_[0] =~ s/\r?\n/\%BR\%/g;
     return $_[0];
 }
@@ -110,8 +111,8 @@ NB. Shall become obsoleted as soon as the plugin rewritted to be based
 totally on =registerTagHandler()= interface.
 
 =cut
-sub protectValue
-{
+
+sub protectValue {
     my $val = shift;
     dprint "Before protecting: $val\n";
     $val =~ s/(.)/\.$1/gs;
@@ -120,9 +121,9 @@ sub protectValue
     $val =~ s/\r/\\r/gs;
     $val = escapeHTML($val);
     dprint "After protecting: $val\n";
-    return "$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectStart}${val}$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectEnd}";
+    return
+"$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectStart}${val}$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectEnd}";
 }
-
 
 =begin TML
 
@@ -137,8 +138,8 @@ NB. Shall become obsoleted as soon as the plugin rewritted to be based
 totally on =registerTagHandler()= interface.
 
 =cut
-sub unprotectValue
-{
+
+sub unprotectValue {
     my $val = shift;
     dprint "Before unprotecting: $val\n";
     my $request = Foswiki::Func::getRequestObject();
@@ -151,19 +152,17 @@ sub unprotectValue
     return $val;
 }
 
-sub query_params
-{
+sub query_params {
     my $param_str = shift;
 
-    my %params = Foswiki::Func::extractParameters($param_str);
+    my %params    = Foswiki::Func::extractParameters($param_str);
     my @list2hash = qw(unquoted protected multivalued);
 
     foreach my $param (@list2hash) {
-        if (defined $params{$param}) {
-            $params{$param} = {
-                map {$_ => 1} split " ", $params{$param}
-            };
-        } else {
+        if ( defined $params{$param} ) {
+            $params{$param} = { map { $_ => 1 } split " ", $params{$param} };
+        }
+        else {
             $params{$param} = {};
         }
     }
@@ -171,149 +170,149 @@ sub query_params
     return %params;
 }
 
-sub newQID
-{
+sub newQID {
     $query_id++;
     return "DBI_CONTENT$query_id";
 }
 
-sub registerQuery
-{
-    my ($qid, $params) = @_;
-    if ($params->{subquery}) {
+sub registerQuery {
+    my ( $qid, $params ) = @_;
+    if ( $params->{subquery} ) {
         $queries{$qid}{subquery} = $params->{subquery};
-        $subquery_map{$params->{subquery}} = $qid;
+        $subquery_map{ $params->{subquery} } = $qid;
         return "";
     }
     return "\%$qid\%";
 }
 
-sub storeDoQuery
-{
-    my ($param_str, $content) = @_;
+sub storeDoQuery {
+    my ( $param_str, $content ) = @_;
     my %params;
-    my ($meta, $conname);
+    my ( $meta, $conname );
 
-    %params = query_params($param_str);
+    %params  = query_params($param_str);
     $conname = $params{_DEFAULT};
 
     return wikiErrMsg("This DBI connection is not defined: $conname.")
-        unless db_connected($conname);
+      unless db_connected($conname);
 
-    my $allowed = db_allowed($conname, "$web.$topic");
+    my $allowed = db_allowed( $conname, "$web.$topic" );
     return wikiErrMsg("You are not allowed to modify this DB ($web.$topic).")
-        unless $allowed;
+      unless $allowed;
 
     my $qid = newQID;
 
-    unless (defined $content) {
-        if (defined $params{topic} && Foswiki::Func::topicExists(undef, $params{topic})) {
-            ($meta, $content) = Foswiki::Func::readTopic(undef, $params{topic}, undef, 1);
-            if (defined $params{script}) {
-                return wikiErrMsg("%<nop>DBI_DO% script name must be a valid identifier")
-                    unless $params{script} =~ /^\w\w*$/;
-                if ($content =~ /%DBI_CODE{"$params{script}"}%(.*?)%DBI_CODE%/s) {
+    unless ( defined $content ) {
+        if ( defined $params{topic}
+            && Foswiki::Func::topicExists( undef, $params{topic} ) )
+        {
+            ( $meta, $content ) =
+              Foswiki::Func::readTopic( undef, $params{topic}, undef, 1 );
+            if ( defined $params{script} ) {
+                return wikiErrMsg(
+                    "%<nop>DBI_DO% script name must be a valid identifier")
+                  unless $params{script} =~ /^\w\w*$/;
+                if ( $content =~
+                    /%DBI_CODE{"$params{script}"}%(.*?)%DBI_CODE%/s )
+                {
                     $content = $1;
-                } else {
+                }
+                else {
                     undef $content;
                 }
-                if (defined $content) {
+                if ( defined $content ) {
                     $content =~ s/^\s*%CODE{.*?}%(.*)%ENDCODE%\s*$/$1/s;
                     $content =~ s/^\s*<pre>(.*)<\/pre>\s*$/$1/s;
                 }
             }
         }
         return wikiErrMsg("No code defined for this %<nop>DBI_DO% variable")
-            unless defined $content;
+          unless defined $content;
     }
 
-    $queries{$qid}{params} = \%params;
+    $queries{$qid}{params}     = \%params;
     $queries{$qid}{connection} = $conname;
-    $queries{$qid}{type} = "do";
-    $queries{$qid}{code} = $content;
-    my $script_name = $params{script} ?
-                        $params{script} : 
-                        ($params{name} ?
-                            $params{name} : 
-                            ($params{subquery} ?
-                                $params{subquery} :
-                                "dbi_do_script"
-                            )
-                        );
-    $queries{$qid}{script_name} = $params{topic} ? "$params{topic}\:\:$script_name" : $script_name;
+    $queries{$qid}{type}       = "do";
+    $queries{$qid}{code}       = $content;
+    my $script_name =
+      $params{script} ? $params{script}
+      : (
+        $params{name} ? $params{name}
+        : (
+            $params{subquery} ? $params{subquery}
+            : "dbi_do_script"
+        )
+      );
+    $queries{$qid}{script_name} =
+      $params{topic} ? "$params{topic}\:\:$script_name" : $script_name;
 
-    return registerQuery($qid, \%params);
+    return registerQuery( $qid, \%params );
 }
 
-sub storeQuery
-{
-    my ($param_str, $content) = @_;
+sub storeQuery {
+    my ( $param_str, $content ) = @_;
     my %params;
     my $conname;
 
-    %params = query_params($param_str);
+    %params  = query_params($param_str);
     $conname = $params{_DEFAULT};
 
     return wikiErrMsg("This DBI connection is not defined: $conname.")
-        unless db_connected($conname);
+      unless db_connected($conname);
 
     my $qid = newQID;
 
-    $queries{$qid}{params} = \%params;
+    $queries{$qid}{params}     = \%params;
     $queries{$qid}{connection} = $conname;
-    $queries{$qid}{type} = "query";
-    $queries{$qid}{_nesting} = 0;
+    $queries{$qid}{type}       = "query";
+    $queries{$qid}{_nesting}   = 0;
 
     my $content_kwd = qr/\n\.(head(?:er)?|body|footer)\s*/s;
 
-    my %map_kwd = (
-        head => header =>
-    );
+    my %map_kwd = ( head => header => );
 
     my @content = split $content_kwd, $content;
 
     my $statement = shift @content;
 
-    for (my $i = 1; $i < @content; $i+=2) {
+    for ( my $i = 1 ; $i < @content ; $i += 2 ) {
         $content[$i] =~ s/\n*$//s;
         $content[$i] =~ s/\n/ /gs;
         $content[$i] =~ s/(?<!\\)\\n/\n/gs;
         $content[$i] =~ s/\\\\n/\\n/gs;
-        my $kwd = $map_kwd{$content[$i - 1]} || $content[$i - 1];
+        my $kwd = $map_kwd{ $content[ $i - 1 ] } || $content[ $i - 1 ];
         $queries{$qid}{$kwd} = $content[$i];
     }
 
     $queries{$qid}{statement} = $statement;
 
-#    dprint "Query data:\n", Dumper($queries{$qid});
+    #    dprint "Query data:\n", Dumper($queries{$qid});
 
-    return registerQuery($qid, \%params);
+    return registerQuery( $qid, \%params );
 }
 
-sub storeCallQuery
-{
+sub storeCallQuery {
     my ($param_str) = @_;
     my %params;
 
     my $qid = newQID;
 
-    %params = Foswiki::Func::extractParameters($param_str);
-    $queries{$qid}{columns} = \%params;
-    $queries{$qid}{call} = $params{_DEFAULT};
-    $queries{$qid}{type} = 'query';
+    %params                  = Foswiki::Func::extractParameters($param_str);
+    $queries{$qid}{columns}  = \%params;
+    $queries{$qid}{call}     = $params{_DEFAULT};
+    $queries{$qid}{type}     = 'query';
     $queries{$qid}{_nesting} = 0;
 
     return "\%$qid\%";
 }
 
-sub dbiCode
-{
-    my ($param_str, $content) = @_;
+sub dbiCode {
+    my ( $param_str, $content ) = @_;
     my %params;
 
     %params = Foswiki::Func::extractParameters($param_str);
 
-    unless ($content =~ /^\s*%CODE{.*?}%(.*)%ENDCODE%\s*$/s) {
+    unless ( $content =~ /^\s*%CODE{.*?}%(.*)%ENDCODE%\s*$/s ) {
         $content = "<pre>$content</pre>";
     }
 
@@ -331,49 +330,48 @@ sub dbiCode
 EOT
 }
 
-sub expandColumns
-{
-    my ($text, $columns) = @_;
+sub expandColumns {
+    my ( $text, $columns ) = @_;
 
-    dprint ">>>>> EXPANDING:\n--------------------------------\n$text\n--------------------------------\n";
-    if (keys %$columns) {
-        my $regex = "\%(" . join("|", keys %$columns) . ")\%";
+    dprint
+">>>>> EXPANDING:\n--------------------------------\n$text\n--------------------------------\n";
+    if ( keys %$columns ) {
+        my $regex = "\%(" . join( "|", keys %$columns ) . ")\%";
         $text =~ s/$regex/$columns->{$1}/ge;
     }
     $text =~ s/\%DBI_(?:SUBQUERY|EXEC){(.*?)}\%/&subQuery($1, $columns)/ge;
-    dprint "<<<<< EXPANDED:\n--------------------------------\n$text\n--------------------------------\n";
+    dprint
+"<<<<< EXPANDED:\n--------------------------------\n$text\n--------------------------------\n";
 
     return $text;
 }
 
-sub executeQueryByType
-{
-    my ($qid, $columns) = @_;
+sub executeQueryByType {
+    my ( $qid, $columns ) = @_;
     $columns ||= {};
     my $query = $queries{$qid};
     return (
-        $query->{type} eq 'query' ?
-            getQueryResult($qid, $columns) :
-            (
-                $query->{type} eq 'do' ?
-                doQuery($qid, $columns) :
-    #			wikiErrMsg("INTERNAL: Query type `$query->{type}' is unknown.")
-                    ''
-            )
+        $query->{type} eq 'query' ? getQueryResult( $qid, $columns )
+        : (
+            $query->{type} eq 'do' ? doQuery( $qid, $columns )
+            :
+
+             #			wikiErrMsg("INTERNAL: Query type `$query->{type}' is unknown.")
+              ''
+        )
     );
 }
 
-sub subQuery
-{
-    my %params = query_params(shift);
+sub subQuery {
+    my %params  = query_params(shift);
     my $columns = shift;
-    dprint "Processing subquery $params{_DEFAULT} => $subquery_map{$params{_DEFAULT}}";
-    return executeQueryByType($subquery_map{$params{_DEFAULT}}, $columns);
+    dprint
+"Processing subquery $params{_DEFAULT} => $subquery_map{$params{_DEFAULT}}";
+    return executeQueryByType( $subquery_map{ $params{_DEFAULT} }, $columns );
 }
 
-sub getQueryResult
-{
-    my ($qid, $columns) = @_;
+sub getQueryResult {
+    my ( $qid, $columns ) = @_;
 
     my $query = $queries{$qid};
     return wikiErrMsg("Subquery $qid is not defined.") unless defined $query;
@@ -381,35 +379,40 @@ sub getQueryResult
     my $params = $query->{params} || {};
     $columns ||= {};
 
-    if ($query->{_nesting} > $maxRecursionLevel) {
-        my $errmsg = "Deep recursion (more then $maxRecursionLevel) occured for subquery $params->{subquery}";
+    if ( $query->{_nesting} > $maxRecursionLevel ) {
+        my $errmsg =
+"Deep recursion (more then $maxRecursionLevel) occured for subquery $params->{subquery}";
         warning $errmsg;
         throw Error::Simple($errmsg);
     }
 
     my $result = "";
 
-    if (defined $query->{call}) {
+    if ( defined $query->{call} ) {
 
-        $result = getQueryResult($subquery_map{$query->{call}}, $query->{columns});
+        $result =
+          getQueryResult( $subquery_map{ $query->{call} }, $query->{columns} );
 
-    } else {
+    }
+    else {
         $query->{_nesting}++;
-        dprint "Nesting level $query->{_nesting} for subquery ", ($query->{subquery} || "UNDEFINED"), "....\n";;
+        dprint "Nesting level $query->{_nesting} for subquery ",
+          ( $query->{subquery} || "UNDEFINED" ), "....\n";
         $columns->{".nesting."} = $query->{_nesting};
 
-        my $dbh = $query->{dbh} = db_connect($params->{_DEFAULT});
-        throw Error::Simple("DBI connect error for connection ".$params->{_DEFAULT}) unless $dbh;
+        my $dbh = $query->{dbh} = db_connect( $params->{_DEFAULT} );
+        throw Error::Simple(
+            "DBI connect error for connection " . $params->{_DEFAULT} )
+          unless $dbh;
 
-        if (defined $query->{header}) {
-            $result .= expandColumns($query->{header}, $columns);
+        if ( defined $query->{header} ) {
+            $result .= expandColumns( $query->{header}, $columns );
         }
 
-        my $statement = Foswiki::Func::expandCommonVariables(
-            expandColumns($query->{statement}, $columns),
-            $topic,
-            $web
-        );
+        my $statement =
+          Foswiki::Func::expandCommonVariables(
+            expandColumns( $query->{statement}, $columns ),
+            $topic, $web );
         $query->{expanded_statement} = $statement;
         dprint $statement;
 
@@ -417,37 +420,38 @@ sub getQueryResult
         $sth->execute;
 
         my $fetched = 0;
-        while (my $row = $sth->fetchrow_hashref) {
+        while ( my $row = $sth->fetchrow_hashref ) {
             unless ($fetched) {
-                dprint "Columns: ", join(", ", keys %$row);
+                dprint "Columns: ", join( ", ", keys %$row );
             }
             $fetched++;
 
             # Prepare row for output;
-            foreach my $col (keys %$row) {
-                if ($col =~ /\s/) {
-                    (my $out_col = $col) =~ s/\s/_/;
+            foreach my $col ( keys %$row ) {
+                if ( $col =~ /\s/ ) {
+                    ( my $out_col = $col ) =~ s/\s/_/;
                     $row->{$out_col} = $row->{$col};
                     delete $row->{$col};
-                    $col=$out_col;
+                    $col = $out_col;
                 }
                 $row->{$col} = '_NULL_' unless defined $row->{$col};
-                $row->{$col} = nl2br(escapeHTML($row->{$col}))
-                    unless defined $params->{unquoted}{$col};
-                $row->{$col} = protectValue($row->{$col})
-                    if $params->{protected}{$col};
+                $row->{$col} = nl2br( escapeHTML( $row->{$col} ) )
+                  unless defined $params->{unquoted}{$col};
+                $row->{$col} = protectValue( $row->{$col} )
+                  if $params->{protected}{$col};
             }
 
-            my $all_columns = {%$columns, %$row};
-            my $out = expandColumns($query->{body}, $all_columns);
+            my $all_columns = { %$columns, %$row };
+            my $out = expandColumns( $query->{body}, $all_columns );
             $result .= $out;
         }
 
-        if ($fetched > 0 || $query->{_nesting} < 2) {
-            if (defined $query->{footer}) {
-                $result .= expandColumns($query->{footer}, $columns);
+        if ( $fetched > 0 || $query->{_nesting} < 2 ) {
+            if ( defined $query->{footer} ) {
+                $result .= expandColumns( $query->{footer}, $columns );
             }
-        } else {
+        }
+        else {
             # Avoid any output for empty recursively called subqueries.
             $result = "";
         }
@@ -458,28 +462,29 @@ sub getQueryResult
     return $result;
 }
 
-sub doQuery
-{
-    my ($qid, $columns) = @_;
+sub doQuery {
+    my ( $qid, $columns ) = @_;
 
-    my $query = $queries{$qid};
+    my $query  = $queries{$qid};
     my $params = $query->{params} || {};
-    my $rc = "";
+    my $rc     = "";
     $columns ||= {};
 
     dprint "doQuery()\n";
 
     my %multivalued;
-    if (defined $params->{multivalued}) {
-        %multivalued = %{$params->{multivalued}};
+    if ( defined $params->{multivalued} ) {
+        %multivalued = %{ $params->{multivalued} };
     }
 
     # Preparing sub() code.
-    my $dbh = $query->{dbh} = db_connect($params->{_DEFAULT});
-    throw Error::Simple("DBI connect error for connection ".$params->{_DEFAULT}) unless $dbh;
+    my $dbh = $query->{dbh} = db_connect( $params->{_DEFAULT} );
+    throw Error::Simple(
+        "DBI connect error for connection " . $params->{_DEFAULT} )
+      unless $dbh;
     my $request = Foswiki::Func::getRequestObject();
-    dprint("REQUEST ACTIONS: ", $request->action, " thru ", $request->method);
-    dprint("REQUEST PARAMETERS: {", join("}{", $request->param), "}\n");
+    dprint( "REQUEST ACTIONS: ", $request->action, " thru ", $request->method );
+    dprint( "REQUEST PARAMETERS: {", join( "}{", $request->param ), "}\n" );
     my $sub_code = <<EOC;
 sub {
         my (\$dbh, \$request, \$varParams, \$dbRecord) = \@_;
@@ -501,45 +506,50 @@ EOC
 
     my $sub = eval $sub_code;
     return wikiErrMsg($@) if $@;
-    $rc = $sub->($dbh, $request, $params, $columns);
+    $rc = $sub->( $dbh, $request, $params, $columns );
 
     return $rc;
 }
 
-sub handleQueries
-{
-    foreach my $qid (sort keys %queries) {
+sub handleQueries {
+    foreach my $qid ( sort keys %queries ) {
         my $query = $queries{$qid};
         dprint "Processing query $qid\n";
         try {
             $query->{result} = executeQueryByType($qid)
-                unless $query->{subquery};
+              unless $query->{subquery};
         }
         catch Error::Simple with {
             my $err = shift;
             warning $err->{-text};
             my $query_text = "";
-            if (defined $query->{expanded_statement}) {
+            if ( defined $query->{expanded_statement} ) {
                 $query_text = "<br><pre>$query->{expanded_statement}</pre>";
             }
             if ($debug) {
-                $query->{result} = wikiErrMsg("<pre>", $err->stacktrace, "</pre>", $query_text);
-            } else {
+                $query->{result} =
+                  wikiErrMsg( "<pre>", $err->stacktrace, "</pre>",
+                    $query_text );
+            }
+            else {
                 $query->{result} = wikiErrMsg("$err->{-text}$query_text");
             }
         }
         otherwise {
-            warning "There is a problem with QID $qid on connection $queries{$qid}{connection}";
+            warning
+"There is a problem with QID $qid on connection $queries{$qid}{connection}";
             my $errstr;
-            if (defined $queries{$qid}{dbh}) {
+            if ( defined $queries{$qid}{dbh} ) {
                 $errstr = $queries{$qid}{dbh}->errstr;
-            } else {
+            }
+            else {
                 $errstr = $DBI::errstr;
             }
             warning "DBI Error for query $qid: $errstr";
             $query->{result} = wikiErrMsg("DBI Error: $errstr");
         };
-        dprint "RESULT:\n", defined $query->{result} ? $query->{result} : "*UNDEFINED*";
+        dprint "RESULT:\n",
+          defined $query->{result} ? $query->{result} : "*UNDEFINED*";
     }
 }
 
@@ -596,8 +606,8 @@ sub initPlugin {
     # This will be called whenever %EXAMPLETAG% or %EXAMPLETAG{...}% is
     # seen in the topic text.
 
-    # TODO This is what DBIQueryPlugin shall be using instead of 
-    # pre/postprocessing parsing. 
+    # TODO This is what DBIQueryPlugin shall be using instead of
+    # pre/postprocessing parsing.
     # Foswiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
 
     # Allow a sub to be called from the REST interface
@@ -605,13 +615,13 @@ sub initPlugin {
     # core enforced security for the handler, and is the default configuration
     # as of Foswiki 1.1.2
 
-    #Foswiki::Func::registerRESTHandler(
-    #    'example', \&restExample,
-    #    authenticate => 1,  # Set to 0 if handler should be useable by WikiGuest
-    #    validate     => 1,  # Set to 0 to disable StrikeOne CSRF protection
-    #    http_allow => 'POST', # Set to 'GET,POST' to allow use HTTP GET and POST
-    #    description => 'Example handler for Empty Plugin'
-    #);
+   #Foswiki::Func::registerRESTHandler(
+   #    'example', \&restExample,
+   #    authenticate => 1,  # Set to 0 if handler should be useable by WikiGuest
+   #    validate     => 1,  # Set to 0 to disable StrikeOne CSRF protection
+   #    http_allow => 'POST', # Set to 'GET,POST' to allow use HTTP GET and POST
+   #    description => 'Example handler for Empty Plugin'
+   #);
 
     # Plugin correctly initialized
     dprint "initPlugin is OK";
@@ -787,13 +797,13 @@ Foswiki:Development.AddToZoneFromPluginHandlers if you are calling
 
 =cut
 
-sub commonTagsHandler
-{
-#    my ( $text, $topic, $web, $included, $meta ) = @_;
+sub commonTagsHandler {
 
-    #Foswiki::Func::writeDebug( "- " . __PACKAGE__ . "::CommonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    #    my ( $text, $topic, $web, $included, $meta ) = @_;
+
+#Foswiki::Func::writeDebug( "- " . __PACKAGE__ . "::CommonTagsHandler( $_[2].$_[1] )" ) if $debug;
     dprint("CommonTagsHandler( $_[2].$_[1] )");
-    if ($_[3]) { # We're being included
+    if ( $_[3] ) {    # We're being included
         processPage(@_);
     }
 }
@@ -826,12 +836,13 @@ Foswiki:Development.AddToZoneFromPluginHandlers if you are calling
 =cut
 
 sub beforeCommonTagsHandler {
-#    my ( $text, $topic, $web, $meta ) = @_;
-#
-#    # You can work on $text in place by using the special perl
-#    # variable $_[0]. These allow you to operate on $text
-#    # as if it was passed by reference; for example:
-#    # $_[0] =~ s/SpecialString/my alternative/ge;
+
+    #    my ( $text, $topic, $web, $meta ) = @_;
+    #
+    #    # You can work on $text in place by using the special perl
+    #    # variable $_[0]. These allow you to operate on $text
+    #    # as if it was passed by reference; for example:
+    #    # $_[0] =~ s/SpecialString/my alternative/ge;
     processPage(@_);
 }
 
@@ -951,11 +962,12 @@ Since Foswiki::Plugins::VERSION = '2.0'
 =cut
 
 sub postRenderingHandler {
-#    my $text = shift;
-#    # You can work on $text in place by using the special perl
-#    # variable $_[0]. These allow you to operate on $text
-#    # as if it was passed by reference; for example:
-#    # $_[0] =~ s/SpecialString/my alternative/ge;
+
+    #    my $text = shift;
+    #    # You can work on $text in place by using the special perl
+    #    # variable $_[0]. These allow you to operate on $text
+    #    # as if it was passed by reference; for example:
+    #    # $_[0] =~ s/SpecialString/my alternative/ge;
 
     dprint "- ${pluginName}::endRenderingHandler( $web.$topic )";
 
