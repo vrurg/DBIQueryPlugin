@@ -13,6 +13,7 @@ use DBI;
 use Error qw(:try);
 use CGI qw(:html2);
 use Carp qw(longmess);
+use Foswiki::Contrib::DatabaseContrib;
 
 # $VERSION is referred to by Foswiki, and is the only global variable that
 # *must* exist in this package. For best compatibility, the simple quoted decimal
