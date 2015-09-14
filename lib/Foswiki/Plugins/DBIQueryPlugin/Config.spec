@@ -3,7 +3,7 @@
 #
 # **BOOLEAN**
 # Debugging flag for the plugin.
-$Foswiki::cfg::{Plugins}{DBIQueryPlugin} = 0;
+$Foswiki::cfg::{Plugins}{DBIQueryPlugin}{Debug} = 0;
 
 # **NUMBER**
 # Defines how many recursions could be performed on a query before it's considered endless or too deep.

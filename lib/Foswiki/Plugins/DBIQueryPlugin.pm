@@ -73,7 +73,7 @@ sub warning(@) {
 
 sub dprint(@) {
     return Foswiki::Func::writeDebug( message_prefix() . join( "", @_ ) )
-      if $debug;
+      if $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug};
 }
 
 sub wikiErrMsg {
@@ -526,7 +526,7 @@ sub handleQueries {
             if ( defined $query->{expanded_statement} ) {
                 $query_text = "<br><pre>$query->{expanded_statement}</pre>";
             }
-            if ($debug) {
+            if ($Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug}) {
                 $query->{result} =
                   wikiErrMsg( "<pre>", $err->stacktrace, "</pre>",
                     $query_text );
@@ -801,7 +801,6 @@ sub commonTagsHandler {
 
     #    my ( $text, $topic, $web, $included, $meta ) = @_;
 
-#Foswiki::Func::writeDebug( "- " . __PACKAGE__ . "::CommonTagsHandler( $_[2].$_[1] )" ) if $debug;
     dprint("CommonTagsHandler( $_[2].$_[1] )");
     if ( $_[3] ) {    # We're being included
         processPage(@_);
