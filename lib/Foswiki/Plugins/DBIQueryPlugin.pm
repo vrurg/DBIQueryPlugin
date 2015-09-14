@@ -384,7 +384,7 @@ sub getQueryResult {
 
     if ( $query->{_nesting} > $Foswiki::cfg{Plugins}{DBIQueryPlugin}{maxRecursionLevel} ) {
         my $errmsg =
-"Deep recursion (more then $maxRecursionLevel) occured for subquery $params->{subquery}";
+"Deep recursion (more then $Foswiki::cfg{Plugins}{DBIQueryPlugin}{maxRecursionLevel}) occured for subquery $params->{subquery}";
         warning $errmsg;
         throw Error::Simple($errmsg);
     }
