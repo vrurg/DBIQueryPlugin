@@ -62,7 +62,7 @@ our $SHORTDESCRIPTION =
 # entries so they can be used with =configure=.
 our $NO_PREFS_IN_TOPIC = 1;
 
-my ( $topic, $web, $user, $installWeb, %queries );
+my ( $topic, $web, $user, $installWeb, %queries, %subquery_map );
 
 sub message_prefix {
     my @call = caller(2);
@@ -382,7 +382,7 @@ sub getQueryResult {
     my $params = $query->{params} || {};
     $columns ||= {};
 
-    if ( $query->{_nesting} > $maxRecursionLevel ) {
+    if ( $query->{_nesting} > $Foswiki::cfg{Plugins}{DBIQueryPlugin}{maxRecursionLevel} ) {
         my $errmsg =
 "Deep recursion (more then $maxRecursionLevel) occured for subquery $params->{subquery}";
         warning $errmsg;
@@ -973,7 +973,7 @@ sub postRenderingHandler {
 
     dprint "endRenderingHandler( $web.$topic )";
 
-    $_[0] =~ s/$protectStart(.*?)$protectEnd/&unprotectValue($1)/ges;
+    $_[0] =~ s/$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectStart}(.*?)$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectEnd}/&unprotectValue($1)/ges;
 }
 
 =begin TML
