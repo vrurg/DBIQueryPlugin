@@ -61,6 +61,8 @@ our $SHORTDESCRIPTION =
 # entries so they can be used with =configure=.
 our $NO_PREFS_IN_TOPIC = 1;
 
+my ( $topic, $web, $user, $installWeb );
+
 sub message_prefix {
     my @call = caller(2);
     my $line = ( caller(1) )[2];
@@ -580,7 +582,7 @@ FOOBARSOMETHING. This avoids namespace issues.
 =cut
 
 sub initPlugin {
-    my ( $topic, $web, $user, $installWeb ) = @_;
+    ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
     if ( $Foswiki::Plugins::VERSION < 2.3 ) {
