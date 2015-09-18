@@ -82,9 +82,9 @@ sub dprint(@) {
 
 sub wikiErrMsg {
     return
-        "<strong>\%RED\%<pre>"
+        '<strong>%RED%<pre>'
       . join( "", @_ )
-      . "</pre>\%ENDCOLOR\%</strong>";
+      . '</pre>%ENDCOLOR%</strong>';
 }
 
 =begin TML
@@ -501,8 +501,14 @@ sub {
         }
         my \$rc = "";
 
+        try {
 #line 1,"$query->{script_name}"
-        $query->{code}
+            $query->{code}
+        } catch Error::Simple {
+            \$rc .= wikiErrMsg(shift->{-text});
+        } otherwise {
+            throw shift;
+        };
 
         return \$rc;
 }
@@ -665,7 +671,7 @@ sub initPlugin {
    #);
 
     # Plugin correctly initialized
-    dprint "initPlugin is OK";
+    dprint "initPlugin for $web.$topic is OK";
     return 1;
 }
 
