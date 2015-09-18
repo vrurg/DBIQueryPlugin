@@ -383,7 +383,9 @@ sub getQueryResult {
     my $params = $query->{params} || {};
     $columns ||= {};
 
-    if ( $query->{_nesting} > $Foswiki::cfg{Plugins}{DBIQueryPlugin}{maxRecursionLevel} ) {
+    if ( $query->{_nesting} >
+        $Foswiki::cfg{Plugins}{DBIQueryPlugin}{maxRecursionLevel} )
+    {
         my $errmsg =
 "Deep recursion (more then $Foswiki::cfg{Plugins}{DBIQueryPlugin}{maxRecursionLevel}) occured for subquery $params->{subquery}";
         warning $errmsg;
@@ -489,6 +491,7 @@ sub doQuery {
     my $request = Foswiki::Func::getRequestObject();
     dprint( "REQUEST ACTIONS: ", $request->action, " thru ", $request->method );
     dprint( "REQUEST PARAMETERS: {", join( "}{", $request->param ), "}\n" );
+    dprint("REQUEST TOPC: $web.$topic\n");
     my $sub_code = <<EOC;
 sub {
         my (\$dbh, \$request, \$varParams, \$dbRecord) = \@_;
@@ -499,6 +502,7 @@ sub {
             my \@val = \$request->param(\$cgiParam);
             \$httpParams{\$cgiParam} = (\$multivalued{\$cgiParam} || (\@val > 1)) ? \\\@val : \$val[0];
         }
+        dprint( "doQuery code for $web.$topic\n" );
         my \$rc = "";
 
         try {
@@ -536,7 +540,7 @@ sub handleQueries {
             if ( defined $query->{expanded_statement} ) {
                 $query_text = "<br><pre>$query->{expanded_statement}</pre>";
             }
-            if ($Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug}) {
+            if ( $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug} ) {
                 $query->{result} =
                   wikiErrMsg( "<pre>", $err->stacktrace, "</pre>",
                     $query_text );
@@ -563,8 +567,7 @@ sub handleQueries {
     }
 }
 
-sub processPage
-{
+sub processPage {
     state $level = 0;
 
     $level++;
@@ -578,14 +581,17 @@ sub processPage
     # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
     my $doHandle = 0;
     $_[0] =~ s/%DBI_VERSION%/$VERSION/gs;
-    if ($_[0] =~ s/%DBI_DO{(.*?)}%(?:(.*?)%DBI_DO%)?/&storeDoQuery($1, $2)/ges) {
+    if (
+        $_[0] =~ s/%DBI_DO{(.*?)}%(?:(.*?)%DBI_DO%)?/&storeDoQuery($1, $2)/ges )
+    {
         $doHandle = 1;
     }
     $_[0] =~ s/\%DBI_CODE{(.*?)}%(.*?)\%DBI_CODE%/&dbiCode($1, $2)/ges;
-    if ($_[0] =~ s/%DBI_QUERY{(.*?)}%(.*?)%DBI_QUERY%/&storeQuery($1, $2)/ges) {
+    if ( $_[0] =~ s/%DBI_QUERY{(.*?)}%(.*?)%DBI_QUERY%/&storeQuery($1, $2)/ges )
+    {
         $doHandle = 1;
     }
-    if ($_[0] =~ s/%DBI_CALL{(.*?)}%/&storeCallQuery($1)/ges) {
+    if ( $_[0] =~ s/%DBI_CALL{(.*?)}%/&storeCallQuery($1)/ges ) {
         $doHandle = 1;
     }
     if ($doHandle) {
@@ -1017,7 +1023,8 @@ sub postRenderingHandler {
 
     dprint "endRenderingHandler( $web.$topic )";
 
-    $_[0] =~ s/$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectStart}(.*?)$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectEnd}/&unprotectValue($1)/ges;
+    $_[0] =~
+s/$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectStart}(.*?)$Foswiki::cfg{Plugins}{DBIQueryPlugin}{protectEnd}/&unprotectValue($1)/ges;
 }
 
 =begin TML
