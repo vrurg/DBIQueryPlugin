@@ -82,9 +82,9 @@ sub dprint(@) {
 
 sub wikiErrMsg {
     return
-        '<strong>%RED%<pre>'
+        "<strong>\%RED\%ERROR:\n<pre>"
       . join( "", @_ )
-      . '</pre>%ENDCOLOR%</strong>';
+      . "\n</pre>\%ENDCOLOR\%</strong>";
 }
 
 =begin TML
@@ -508,10 +508,10 @@ sub {
         try {
 #line 1,"$query->{script_name}"
             $query->{code}
-        } catch Error::Simple {
+        } catch Error::Simple with {
             \$rc .= wikiErrMsg(shift->{-text});
         } otherwise {
-            throw shift;
+            throw @_;
         };
 
         return \$rc;
