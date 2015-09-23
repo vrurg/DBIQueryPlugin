@@ -1,0 +1,253 @@
+%META:TOPICINFO{author="VadimBelman" comment="" date="1442877029" format="1.1" version="2"}%
+%META:TOPICPARENT{name="WebHome"}%
+This topic is to be included by other topics only!
+
+%STARTINCLUDE%
+<table width="100%" style="border-top: 1px solid black; border-bottom: 1px solid black; background-color: #EDEDED;" cellpadding="4px" cellspacing="0">
+<tr><td>
+<form name="msgboard" method="post" action="%SCRIPTURLPATH%/view/%BASEWEB%/%BASETOPIC%">
+
+<input type="submit" name="show" value="Show"> last <input type="text" name="last_days" value="%CALC{"$GET(last_days)"}%" maxlength="2" size="2"> days.
+
+<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
+%DBI_CALL{"msg"}%
+</table>
+
+%DBI_DO{"message_board" subquery="get_user_id"}%
+my $users = $dbh->selectcol_arrayref(<<EOQ, undef, $dbRecord->{cur_user});
+SELECT id FROM users WHERE name = ?
+EOQ
+if (@$users == 0) {
+    $dbh->do(<<EOQ, undef, $dbRecord->{cur_user});
+INSERT INTO users (name) VALUES (?)
+EOQ
+    push @$users, $dbh->last_insert_id(undef, undef, undef, undef);
+}
+$rc = $users->[0];
+%DBI_DO%
+
+%DBI_DO{"message_board" subquery="mark_read"}%
+my $user_id = subQuery('"get_user_id"', {cur_user => Foswiki::Func::getWikiUserName()});
+$dbh->do(<<EOQ, undef, $user_id, $dbRecord->{m_id});
+REPLACE read_map
+    (user_id, message_id, time)
+  VALUES
+    (?, ?, NOW())
+EOQ
+#$rc .= "<pre>USER: " . Foswiki::Func::getWikiUserName() . " UID: $user_id</pre>";
+%DBI_DO%
+
+%DBI_QUERY{"message_board" subquery="msg" unquoted="message subject"}%
+%CALC{"$SET(last_days,%URLPARAM{"last_days" default="$IF($EXACT(%SHOW_DAYS%,$NOP($per)SHOW_DAYS$NOP($per)),7,%SHOW_DAYS%)"}%)"}%
+SELECT DISTINCT
+  m.id AS m_id,
+  m.subject,
+  m.message,
+  u.name AS user,
+  DATE_FORMAT(m.create_time, '%d %b %Y %T') AS create_time,
+  DATE_FORMAT(m.modified_time, '%d %b %Y %T') AS modified_time,
+  (
+    SELECT COUNT(*)
+      FROM read_map as rm
+      WHERE
+        rm.message_id = m.id
+        AND rm.user_id = (
+          SELECT cu.id AS curuser_id
+            FROM users AS cu
+            WHERE cu.name = '%WIKIUSERNAME%'
+        )
+        AND rm.time < m.modified_time
+  ) AS is_updated,
+  (
+    SELECT COUNT(*)
+      FROM read_map as rm
+      WHERE
+        rm.message_id = m.id
+        AND rm.user_id = (
+          SELECT cu.id AS curuser_id
+            FROM users AS cu
+            WHERE cu.name = '%WIKIUSERNAME%'
+        )
+  ) AS is_read,
+  m.reply_to AS reply_to,
+  m.thread_id AS thread_id
+FROM
+  messages m
+  INNER JOIN boards b ON (m.board_id=b.id)
+  INNER JOIN users u ON (m.user_id=u.id)
+WHERE
+  IF('%m_id%' = CONCAT('%', 'm_id%'),
+     (b.board = '%BASEWEB%.%BASETOPIC%')
+     AND (
+       IF(%URLPARAM{"show_thread" default="-1"}% != -1,
+         (m.id = %URLPARAM{"show_thread" default="-1"}%),
+         IF(DATEDIFF(CURDATE(), m.create_time) <= %CALC{"$GET(last_days)"}%,
+           (m.reply_to IS NULL)
+           OR DATEDIFF(CURDATE(),(
+                SELECT mr.create_time
+                  FROM messages as mr
+                  WHERE
+                    mr.id = m.reply_to
+                    AND mr.id != %URLPARAM{"show_msg" default="-1"}%
+              )) > %CALC{"$GET(last_days)"}%,
+           (m.id = %URLPARAM{"show_msg" default="-1"}%)
+         )
+       )
+     ),
+     (m.reply_to = '%m_id%')
+  )
+ORDER BY
+  m.create_time
+.body
+%CALC{"$IF($OR($NOT(%is_read%),%is_updated%),$SET(hbg_color,rgb(112,158,186)),$SET(hbg_color,rgb(221,221,221)))"}%
+%DBI_EXEC{"mark_read"}%<tr><td style="border-bottom:1px solid black; %CALC{"$IF(%.nesting.% > 1,padding-left: $EVAL(2*(%.nesting.%-1))em; padding-right: 0;,padding-left: 0px; padding-right: 0px;)"}%">
+<table width="100%" cellpadding="4px" cellspacing="0" style="padding: 0; margin: 0; border: 0;">
+<tr>
+  <td style="background-color: %CALC{"$GET(hbg_color)"}%;" width="20px"><a name="message%m_id%">%CALC{"$IF($EXACT(%reply_to%,_NULL_),$NOP($per)Y$NOP($per),<a href="%SCRIPTURLPATH%/view/%BASEWEB%/%BASETOPIC%?show_msg=%reply_to%#message%reply_to%">$NOP($per)M$NOP($per)</a>)"}%</td>
+  <td style="background-color: %CALC{"$GET(hbg_color)"}%;"> %CALC{"$IF($NOT(%is_read%),$NOP($per)N$NOP($per),$IF(%is_updated%,$NOP($per)U$NOP($per)))"}% *From:* %user%</td>
+  <td style="background-color: %CALC{"$GET(hbg_color)"}%;">
+   _%CALC{"$IF($OR($GET(is_admin),$EXACT(%WIKIUSERNAME%,%user%)),<a href="%SCRIPTURLPATH%/view/%BASEWEB%/%BASETOPIC%?message_id=%m_id%&action=edit#EditForm">Edit</a>&nbsp;)"}%<a href="%SCRIPTURLPATH%/view/%BASEWEB%/%BASETOPIC%?message_id=%m_id%&action=reply#EditForm">Reply</a>%CALC{"$IF($NOT($EXACT(%thread_id%,_NULL_)),&nbsp;<a href="%SCRIPTURLPATH%/view/%BASEWEB%/%BASETOPIC%?show_thread=%thread_id%">Thread</a>)"}%_
+  </td>
+</tr>\n
+<tr>
+  <td style="background-color: %CALC{"$GET(hbg_color)"}%;">&nbsp;</td>
+  <td style="background-color: %CALC{"$GET(hbg_color)"}%;"> *Subject:* %subject%</td>
+  <td style="background-color: %CALC{"$GET(hbg_color)"}%;" width="20%"><strong>Written:</strong>&nbsp;%create_time%%CALC{"$IF($NOT($EXACT(%create_time%,%modified_time%)),%BR%<strong>Modified:</strong>&nbsp;%modified_time%)"}%</td>
+</tr>\n
+<tr>
+  <td>&nbsp;</td>
+  <td colspan="2"><p>%message%</td>
+</tr>\n
+</table>
+</td></tr>
+%DBI_SUBQUERY{"msg"}%
+%DBI_QUERY%
+
+#EditForm
+%DBI_DO{"message_board" name="edit_form"}%
+my ($form_subject, $form_message, $form_hidden, $form_action, $message) = ("", "", "", "post", "");
+my $jump_to_message;
+my $curUser = Foswiki::Func::getWikiUserName();
+my $is_admin = Foswiki::Func::checkAccessPermission('CHANGE', $curUser, undef, $topic, $web);
+if ($httpParams{post}) {
+    my $user_id = subQuery('"get_user_id"', {cur_user => $curUser});
+    
+    my $board = "$web.$topic";
+    my $boards = $dbh->selectcol_arrayref(<<EOQ, undef, $board);
+SELECT id FROM boards WHERE board = ?
+EOQ
+    if (@$boards == 0) {
+        $dbh->do(<<EOQ, undef, $board);
+INSERT INTO boards (board) VALUES (?)
+EOQ
+        push @$boards, $dbh->last_insert_id(undef, undef, undef, undef);
+    }
+
+    my $thread_id;
+    if ($httpParams{related_m_id}) {
+       my $parent = $dbh->selectrow_hashref(<<EOQ, undef, $httpParams{related_m_id});
+SELECT
+    id,
+    thread_id
+  FROM
+    messages
+  WHERE
+    id = ?
+EOQ
+        if ($parent) {
+            unless ($parent->{thread_id}) {
+                $parent->{thread_id} = $parent->{id};
+                $dbh->do("UPDATE messages SET thread_id = ? WHERE id = ?", undef, $parent->{thread_id}, $parent->{id});
+            }
+            $thread_id = $parent->{thread_id};
+        }
+    }
+
+    $dbh->do(<<EOQ, undef, $httpParams{subject}, $httpParams{message}, ($httpParams{related_m_id} || undef), ($thread_id || undef), $user_id, $boards->[0]);
+INSERT INTO messages
+    (subject, message, reply_to, thread_id, user_id, board_id, create_time, modified_time)
+  VALUES
+    (?, ?, ?, ?, ?, ?, NOW(), NOW())
+EOQ
+    $jump_to_message = $dbh->last_insert_id(undef, undef, undef, undef);
+} elsif ($httpParams{edit}) {
+    my $allowed = 1;
+    unless ($is_admin) {
+       my $user = $dbh->selectcol_arrayref(<<EOQ, undef, $curUser);
+SELECT id FROM users WHERE name = ?
+EOQ
+       my $msg_user = $dbh->selectcol_arrayref(<<EOQ, undef, $httpParams{related_m_id});
+SELECT user_id FROM messages WHERE id = ?
+EOQ
+       $allowed = $msg_user->[0] == $user->[0];
+    }
+    if ($allowed) {
+        $dbh->do(<<EOQ, undef, $httpParams{subject}, $httpParams{message}, $httpParams{related_m_id});
+UPDATE messages
+  SET
+    subject = ?,
+    message = ?,
+    modified_time = NOW()
+  WHERE
+    id = ?
+EOQ
+        $jump_to_message = $httpParams{related_m_id};
+    } else {
+        $message = "<strong>\%RED\%You're not allowed to edit this message.\%ENDCOLOR\%</strong>\%BR\%";
+    }
+} elsif (defined($httpParams{action}) && $httpParams{action} =~ /^(edit|reply)$/) {
+    my $action = $1;
+    my $msg = $dbh->selectrow_hashref(<<EOQ, undef, $httpParams{message_id});
+SELECT
+    subject,
+    message
+  FROM
+    messages
+  WHERE
+    id = ?
+EOQ
+  if ($action eq 'reply') {
+     $msg->{subject} =~ s/^(?:Re:\s*)*(.*)$/Re: $1/;
+     $msg->{message} = "";
+  }
+  if ($action eq 'edit') {
+      $form_action = "edit";
+  }
+  $form_subject = protectValue(escapeHTML($msg->{subject}));
+  $form_message = protectValue(escapeHTML($msg->{message}));
+  $form_hidden = "<input type=\"hidden\" name=\"related_m_id\" value=\"$httpParams{message_id}\">";
+}
+if ($jump_to_message) {
+   my $url = Foswiki::Func::getViewUrl($web, $topic) . "#message$jump_to_message";
+   Foswiki::Func::redirectCgiQuery($request, $url);
+} else {
+   Foswiki::Func::expandCommonVariables('%CALC{"$SET(is_admin,' . $is_admin . ')"}%',$topic, $web);
+   $rc = <<FORM;
+$message$form_hidden
+<p align="center">
+<table style="border: 1px solid black; background-color: #E0E0E0; padding: 10px;">
+<tr>
+<td>Subject:</td>
+<td><input type="text" name="subject" value="$form_subject" maxlength="128" size="80"></td>
+</tr>
+<tr valign="top">
+<td valign="top">Message:</td>
+<td><textarea name="message" value="" cols="80" rows="5" valign="top">$form_message</textarea></td>
+</tr>
+<tr>
+<td colspan="2" align="right"><input type="submit" name="$form_action" value="Send"> <input type="submit" name="cancel" value="Cancel"></td>
+</tr>
+</table>
+</p>
+FORM
+}
+%DBI_DO%
+</td></tr>
+</table>
+</form>
+%STOPINCLUDE%
+
+-- Main.VadimBelman - 14 Feb 2006
+<!--
+vim: et ts=4
+-->
