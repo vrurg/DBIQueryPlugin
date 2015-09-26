@@ -68,7 +68,7 @@ my ( $topic, $web, $user, $installWeb, %queries, %subquery_map );
 sub message_prefix {
     my @call = caller(2);
     my $line = ( caller(1) )[2];
-    return "- " . $call[3] . "( $web.$topic )\:$line ";
+    return "- " . $call[3] . (defined $web && defined $topic ? "( $web.$topic )" : "( *uninitialized* )") . "\:$line ";
 }
 
 sub warning(@) {
@@ -76,6 +76,8 @@ sub warning(@) {
 }
 
 sub dprint(@) {
+    say STDERR message_prefix() . join( "", @_ )
+      if $Foswiki::cfg{Plugins}{DBIQueryPlugin}{ConsoleDebug};
     return Foswiki::Func::writeDebug( message_prefix() . join( "", @_ ) )
       if $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug};
 }
@@ -197,13 +199,6 @@ sub storeDoQuery {
     %params  = query_params($param_str);
     $conname = $params{_DEFAULT};
 
-    return wikiErrMsg("This DBI connection is not defined: $conname.")
-      unless db_connected($conname);
-
-    my $allowed = db_allowed( $conname, "$web.$topic" );
-    return wikiErrMsg("You are not allowed to modify this DB ($web.$topic).")
-      unless $allowed;
-
     my $qid = newQID;
 
     unless ( defined $content ) {
@@ -216,8 +211,7 @@ sub storeDoQuery {
                 return wikiErrMsg(
                     "%<nop>DBI_DO% script name must be a valid identifier")
                   unless $params{script} =~ /^\w\w*$/;
-                if ( $content =~
-                    /%DBI_CODE{"$params{script}"}%(.*?)%DBI_CODE%/s )
+                if ( $content =~ /%DBI_CODE{"$params{script}"}%(.*?)%DBI_CODE%/s )
                 {
                     $content = $1;
                 }
@@ -258,11 +252,12 @@ sub storeQuery {
     my %params;
     my $conname;
 
-    %params  = query_params($param_str);
     $conname = $params{_DEFAULT};
 
-    return wikiErrMsg("This DBI connection is not defined: $conname.")
-      unless db_connected($conname);
+    %params  = query_params($param_str);
+
+    #return wikiErrMsg("This DBI connection is not defined: $conname.")
+    #  unless db_connected($conname);
 
     my $qid = newQID;
 
@@ -381,7 +376,12 @@ sub getQueryResult {
     return wikiErrMsg("Subquery $qid is not defined.") unless defined $query;
 
     my $params = $query->{params} || {};
+    my $conname = $params->{_DEFAULT};
     $columns ||= {};
+
+    return wikiErrMsg(
+        "No access to query $conname DB at $web.$topic.")
+      unless db_access_allowed( $conname, "$web.$topic", 'allow_query' );
 
     if ( $query->{_nesting} >
         $Foswiki::cfg{Plugins}{DBIQueryPlugin}{maxRecursionLevel} )
@@ -474,9 +474,14 @@ sub doQuery {
     my $query  = $queries{$qid};
     my $params = $query->{params} || {};
     my $rc     = "";
+    my $conname = $params->{_DEFAULT};
     $columns ||= {};
 
     dprint "doQuery()\n";
+
+    return wikiErrMsg(
+        "No access to modify $conname DB at $web.$topic.")
+      unless db_access_allowed( $conname, "$web.$topic", 'allow_do' );
 
     my %multivalued;
     if ( defined $params->{multivalued} ) {
@@ -484,9 +489,9 @@ sub doQuery {
     }
 
     # Preparing sub() code.
-    my $dbh = $query->{dbh} = db_connect( $params->{_DEFAULT} );
+    my $dbh = $query->{dbh} = db_connect( $conname );
     throw Error::Simple(
-        "DBI connect error for connection " . $params->{_DEFAULT} )
+        "DBI connect error for connection " . $conname )
       unless $dbh;
     my $request = Foswiki::Func::getRequestObject();
     dprint( "REQUEST ACTIONS: ", $request->action, " thru ", $request->method );
@@ -573,12 +578,6 @@ sub processPage {
     $level++;
     dprint "### $level\n\n";
 
-    # This is the place to define customized tags and variables
-    # Called by Foswiki::handleCommonTags, after %INCLUDE:"..."%
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
     my $doHandle = 0;
     $_[0] =~ s/%DBI_VERSION%/$VERSION/gs;
     if (
@@ -635,12 +634,16 @@ FOOBARSOMETHING. This avoids namespace issues.
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
+    dprint "DBIQueryPlugin::initPlugin(", join(",", @_), ")";
+
     # check for Plugins.pm versions
     if ( $Foswiki::Plugins::VERSION < 2.3 ) {
         Foswiki::Func::writeWarning( 'Version mismatch between ',
             __PACKAGE__, ' and Plugins.pm' );
         return 0;
     }
+
+    db_init || return 0;
 
     # Example code of how to get a preference value, register a macro
     # handler and register a RESTHandler (remove code you do not need)
@@ -851,8 +854,7 @@ Foswiki:Development.AddToZoneFromPluginHandlers if you are calling
 =cut
 
 sub commonTagsHandler {
-
-    #    my ( $text, $topic, $web, $included, $meta ) = @_;
+    (undef, $topic, $web) = @_;
 
     dprint("CommonTagsHandler( $_[2].$_[1] )");
     if ( $_[3] ) {    # We're being included
@@ -888,6 +890,9 @@ Foswiki:Development.AddToZoneFromPluginHandlers if you are calling
 =cut
 
 sub beforeCommonTagsHandler {
+    (undef, $topic, $web) = @_;
+
+    dprint "Starting processing.";
 
     #    my ( $text, $topic, $web, $meta ) = @_;
     #
