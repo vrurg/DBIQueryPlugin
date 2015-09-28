@@ -76,10 +76,10 @@ sub warning(@) {
 }
 
 sub dprint(@) {
+    return unless $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug};
     say STDERR message_prefix() . join( "", @_ )
       if $Foswiki::cfg{Plugins}{DBIQueryPlugin}{ConsoleDebug};
-    return Foswiki::Func::writeDebug( message_prefix() . join( "", @_ ) )
-      if $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug};
+    return Foswiki::Func::writeDebug( message_prefix() . join( "", @_ ) );
 }
 
 sub wikiErrMsg {
@@ -381,7 +381,7 @@ sub getQueryResult {
 
     return wikiErrMsg(
         "No access to query $conname DB at $web.$topic.")
-      unless db_access_allowed( $conname, "$web.$topic", 'allow_query' );
+      unless defined($query->{call}) || db_access_allowed( $conname, "$web.$topic", 'allow_query' );
 
     if ( $query->{_nesting} >
         $Foswiki::cfg{Plugins}{DBIQueryPlugin}{maxRecursionLevel} )

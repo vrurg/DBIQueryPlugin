@@ -27,13 +27,28 @@ sub new {
 sub set_up {
     my $this = shift;
 
-    say STDERR "THIS: $this";
+    #say STDERR "THIS: $this";
 
     $this->SUPER::set_up();
 
-    say STDERR "set_up done";
+    #say STDERR "set_up done";
 
     my $temp_dir = $this->{db_test_dir}->dirname;
+
+    $this->assert(
+        Foswiki::Func::addUserToGroup(
+            $this->{session}{user},
+            'AdminGroup', 1
+        ),
+        "Failed to make $this->{session}{user} a new admin"
+    );
+    $this->assert(
+        Foswiki::Func::addUserToGroup(
+            'ScumBag',
+            'AdminGroup', 0
+        ),
+        'Failed to make ScumBag a new admin'
+    );
 
 =pod
     $this->assert(
@@ -46,7 +61,7 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
-    say STDERR "tear down";
+    #say STDERR "tear down";
 
     delete $this->{db_test_dir};
 
@@ -56,18 +71,18 @@ sub tear_down {
 sub loadExtraConfig {
     my $this = shift;
 
-    say STDERR "SUPER::loadExtraConfig";
+    #say STDERR "SUPER::loadExtraConfig";
 
     $this->SUPER::loadExtraConfig();
-    say STDERR "loadExtraConfig";
+    #say STDERR "loadExtraConfig";
 
     $this->{db_test_dir} = File::Temp->newdir('dbiqp_tempXXXX');
     $this->{db_msgb_file} = 'message_board_test.sqlite';
     $this->{do_test_topic} = "Do" . $this->{test_topic};
 
     $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Enabled} = 1;
-    $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug} = 1;
-    $Foswiki::cfg{Plugins}{DBIQueryPlugin}{ConsoleDebug} = 1;
+    $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug} = 0;
+    $Foswiki::cfg{Plugins}{DBIQueryPlugin}{ConsoleDebug} = 0;
     $Foswiki::cfg{PluginsOrder} = 'TWikiCompatibilityPlugin,DBIQueryPlugin,SpreadSheetPlugin,SlideShowPlugin';
 
     $Foswiki::cfg{Contrib}{DatabaseContrib}{dieOnFailure}   = 0;
@@ -83,10 +98,10 @@ sub loadExtraConfig {
                 some_attribute => 'YES',
             },
             allow_do => {
-                "$this->{test_web}.$this->{do_test_topic}" => [qw(ScumBag)],
+                "$this->{test_web}.$this->{do_test_topic}" => [qw(AdminGroup)],
             },
             allow_query => {
-                "$this->{test_web}.$this->{test_topic}" => [qw(ScumBag)],
+                "$this->{test_web}.$this->{test_topic}" => [qw(TestGroup AdminGroup)],
             },
             usermap => {
                 DummyGroup => {
@@ -112,28 +127,44 @@ sub loadExtraConfig {
     };
 }
 
+sub expand_source
+{
+    my $tt = $_[0]->{test_topicObject};
+    return $tt->renderTML($tt->expandMacros($_[1]));
+}
+
 sub test_self {
     my $this = shift;
+}
+
+sub test_version
+{
+    my $this = shift;
+    my $test_topic = $this->{test_topicObject};
+
+    my $v_topic = '%DBI_VERSION%';
+
+    my $v_html = $this->expand_source($v_topic);
+    $this->assert_html_equals( $v_html, "$Foswiki::Plugins::DBIQueryPlugin::VERSION", "\%DBI_VERSION\% output mismatch" );
 }
 
 sub test_query
 {
     my $this = shift;
-    say STDERR "test_query";
 
-    my $query = Unit::Request->new();
-    say STDERR "Before new session: ", $this->{test_web}, ".", $this->{test_topic};
-    my $session = $this->createNewFoswikiSession( 'ScumBag', $query );
-    #my $session = $this->{session};
-    say STDERR "After new session: ", $this->{test_web}, ".", $this->{test_topic};
+    #my $request = Unit::Request->new();
+    #say STDERR "Before new session: ", $this->{test_web}, ".", $this->{test_topic};
+    #my $session = $this->createNewFoswikiSession( 'ScumBag', $request );
+    #say STDERR "After new session: ", $this->{test_web}, ".", $this->{test_topic};
 
-    my $test_topic = Foswiki::Meta->new( $session, $this->{test_web}, $this->{test_topic} );
+    #my $test_topic = Foswiki::Meta->new( $session, $this->{test_web}, $this->{test_topic} );
 
-    say STDERR Dumper($Foswiki::cfg{Extensions}{DatabaseContrib}{connections});
+    #say STDERR Dumper($Foswiki::cfg{Extensions}{DatabaseContrib}{connections});
+
+    my $test_topic = $this->{test_topicObject};
+
 
     my $q_topic = <<TSRC;
-    %DBI_VERSION%
-
 %DBI_QUERY{"mock_connection"}%
 SELECT col1, col2 FROM test_table
 .header
@@ -143,14 +174,109 @@ SELECT col1, col2 FROM test_table
 %DBI_QUERY%
 TSRC
 
-    say STDERR "1. this topic object: ", $session->{user}, "@", $test_topic->web, ".", $test_topic->topic;
-    say STDERR "expandMacros";
-    my $q_out = $test_topic->expandMacros($q_topic);
-    say STDERR "Q_OUT:\n", $q_out;
+    #say STDERR "1. this topic object: ", $session->{user}, "@", $test_topic->web, ".", $test_topic->topic;
+    #say STDERR "expandMacros";
+    my $q_html = $test_topic->renderTML( $test_topic->expandMacros( $q_topic ));
+    #say STDERR "HTML:\n", $q_html;
 
-    say STDERR "renderTML";
-    my $html = $test_topic->renderTML($q_out);
-    say STDERR "HTML:\n", $html;
+    $this->assert_html_equals(
+        $q_html, <<QHTML, "\%DBI_QUERY\% output mismatch" );
+<nop>
+<table border="1" class="foswikiTable" rules="none">
+<thead>
+    <tr class="foswikiTableOdd foswikiTableRowdataBgSorted0 foswikiTableRowdataBg0">
+        <th class="foswikiTableCol0 foswikiFirstCol foswikiLast"> <a href="/bin//TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests/TestTopicDBIQueryPluginTests?sortcol=0;table=1;up=0#sorted_table" rel="nofollow" title="Sort by this column">Col1</a> </th>
+        <th class="foswikiTableCol1 foswikiLastCol foswikiLast"> <a href="/bin//TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests/TestTopicDBIQueryPluginTests?sortcol=1;table=1;up=0#sorted_table" rel="nofollow" title="Sort by this column">Col2</a> </th>
+    </tr>
+</thead>
+<tbody>
+    <tr style="display:none;">
+        <td></td>
+    </tr>
+</tbody>
+</table>
+QHTML
+}
+
+sub test_code
+{
+    my $this = shift;
+
+    my $c_topic = <<TSRC;
+%DBI_CODE{"script"}%
+print 'It works!';
+%DBI_CODE%
+TSRC
+
+    my $c_html = $this->expand_source( $c_topic );
+    #say STDERR "c_html: $c_html";
+    $this->assert_html_equals(
+        $c_html, <<CHTML, "\%DBI_CODE\% output mismatch" );
+<table width="100%" border="0" cellspacing="5px">
+    <tr>
+        <td nowrap> <strong>Script name</strong> </td>
+        <td> <code>script</code> </td>
+    </tr>
+    <tr valign="top">
+        <td nowrap> <strong>Script code</strong> </td>
+        <td> <pre>
+            print 'It works!';
+        </pre> </td>
+    </tr>
+</table>
+CHTML
+}
+
+sub test_subquery
+{
+    my $this = shift;
+
+    my $s_topic = <<TSRC;
+%DBI_CALL{"test_subquery"}%
+%DBI_QUERY{"mock_connection" subquery="test_subquery"}%
+SELECT f1, f2 FROM test_table
+.header
+|*First Column*|*Second Column*|
+.body
+|%f1%|%f2%|
+%DBI_QUERY%
+TSRC
+
+    my $s_html = $this->expand_source($s_topic);
+    #say STDERR "s_html: $s_html";
+
+    $this->assert_html_equals(
+        $s_html, <<SHTML, "\%DBI_CALL\% output mismatch" );
+<nop>
+<table border="1" class="foswikiTable" rules="none">
+    <thead>
+        <tr class="foswikiTableOdd foswikiTableRowdataBgSorted0 foswikiTableRowdataBg0">
+            <th class="foswikiTableCol0 foswikiFirstCol foswikiLast"> <a href="/bin//TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests/TestTopicDBIQueryPluginTests?sortcol=0;table=1;up=0#sorted_table" rel="nofollow" title="Sort by this column">First Column</a> </th>
+            <th class="foswikiTableCol1 foswikiLastCol foswikiLast"> <a href="/bin//TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests/TestTopicDBIQueryPluginTests?sortcol=1;table=1;up=0#sorted_table" rel="nofollow" title="Sort by this column">Second Column</a> </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr style="display:none;">
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+SHTML
+}
+
+sub test_do
+{
+    my $this = shift;
+
+    my $d_topic = <<TSRC;
+%DBI_DO{"mock_connection"}%
+\$rc .= "Test ok!";
+%DBI_DO%
+TSRC
+
+    my $d_html = $this->expand_source($d_topic);
+    say STDERR $d_html;
+
 }
 
 1;
