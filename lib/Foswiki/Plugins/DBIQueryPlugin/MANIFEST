@@ -1,6 +1,9 @@
 !noci
 data/System/DBIQueryPlugin.txt 0644 Documentation page
 data/System/VarDBI_QUERY.txt 0644 Tag documentation
+data/System/VarDBI_DO.txt 0644 Tag documentation
+data/System/VarDBI_CALL.txt 0644 Tag documentation
+data/System/VarDBI_CODE.txt 0644 Tag documentation
 data/Sandbox/PluginTestDBIQueryPlugin.txt 0644 Examples
 lib/Foswiki/Plugins/DBIQueryPlugin.pm 0444 Perl module
 lib/Foswiki/Plugins/DBIQueryPlugin/Config.spec 0444 Configuration

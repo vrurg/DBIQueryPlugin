@@ -14,8 +14,6 @@ of line.  Their meaning shall be obvious from their name:
 |=.body=|It is repeated for each row of data being fetched from the database.|
 |=.footer=|It is appended to the query output.|
 
-Read more on how DBIQueryPlugin works in order to get more detailed explanation of the meaning of each syntax element.
-
 ---++++ Parameters
 
 |*Parameter*|*Description*|*Default*|*Required*|

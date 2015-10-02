@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="VadimBelman" date="1426439233" format="1.1" version="1"}%
+%META:TOPICINFO{author="VadimBelman" comment="" date="1443825457" format="1.1" reprev="2" version="2"}%
 %META:TOPICPARENT{name="Plugins"}%
 <!--
 One line description, required for extensions repository catalog.
@@ -14,9 +14,7 @@ One line description, required for extensions repository catalog.
 
 This plugin is intended to provide Foswiki with ability to make complex database requests using DBI Perl module.
 
-%X% This plugin is undergoing massive code change aiming at making it
-Foswiki compatible. Some additional features are being planned to. This
-documentation may lag behind some changes. Be aware!
+%X% Any help with this documentation is very much welcome as it's really pretty far from being ideal. Thanks a lot!
 
 ---++ Syntax Rules
 
@@ -223,7 +221,7 @@ if ($varParams{test}) {
   </tr>
 </table>
 
-One can make it looking a bit more pretty with a kind of source highlighting plugin:
+One can make it looking a bit more pretty with a kind of source highlighting plugin<sup>[[#ShNote1][1]]</sup>:
 
 <pre>
 %<nop>DBI_CODE{"test"}%
@@ -245,7 +243,7 @@ if ($varParams{test}) {
   <tr valign="top">
     <td nowrap="nowrap"> <strong>Script code</strong> </td>
     <td> 
-<div class="codefragment">
+<div class="dbiq_codefragment">
 <pre><i><b><font color="#000080">if</font></b></i> <font color="#000000">(</font><font color="#993399">$varParams</font><font color="#000000">{</font>test<font color="#000000">}</font><font color="#000000">)</font> <font color="#000000">{</font>
      <font color="#993399">$rc</font> <font color="#000000">=</font> <font color="#0000ff">"This is test."</font><font color="#000000">;</font>
 <font color="#000000">}</font> <i><b><font color="#000080">else</font></b></i> <font color="#000000">{</font>
@@ -256,9 +254,9 @@ if ($varParams{test}) {
 </p></div>
  </td>
   </tr>
-</tbody></table><sup>[[#SH_Note1][1]]</sub>
+</tbody></table>
 
-#SH_Note1
+#ShNote1
 <blockquote>
 <sup>1</sup> The sample has been generated using outdated !SourceHighlighPlugin. Other plugins may generate different output.
 </blockquote>
@@ -283,10 +281,10 @@ There is one special variable =$rc=. A value assigned to it is the value returne
 
 DatabaseContrib API is available to a script. Additionally the following plugin functions could be handy within a script:
 
-   $ subQuery($subquery, $dbRecord) -&gt; $text: Implements =%<nop>DBI_SUBQUERY%= and =%<nop>DBI_CALL%=. =$subquery= is the name of subquery to be called. =$dbRecord= has the same meaning as corresponding =sub= parameter. Returns output of the subquery.
-   $ expandColumns($text, $dbRecord) -&gt; $text: Expands variables within =$text= as described in [[#VariableExpansion][DBIQueryPlugin Expansion]] and returns the result.
-   $ protectValue($text) -&gt; $text: Returns =$text= modified in a way that prevents it from %WIKITOOLNAME% processing.
-   $ wikiErrMsg(@msg) -&gt; $errorMessage: Formats error messages.
+   $ =subQuery($subquery, $dbRecord) -&gt; $text=: Implements =%<nop>DBI_SUBQUERY%= and =%<nop>DBI_CALL%=. =$subquery= is the name of subquery to be called. =$dbRecord= has the same meaning as corresponding =sub= parameter. Returns output of the subquery.
+   $ =expandColumns($text, $dbRecord) -&gt; $text=: Expands variables within =$text= as described in [[#VariableExpansion][DBIQueryPlugin Expansion]] and returns the result.
+   $ =protectValue($text) -&gt; $text=: Returns =$text= modified in a way that prevents it from %WIKITOOLNAME% processing.
+   $ =wikiErrMsg(@msg) -&gt; $errorMessage=: Formats error messages.
 
 #PluginConfig
 ---+++ Database connection configuration
@@ -432,11 +430,10 @@ Dependencies: %$DEPENDENCIES%
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="VadimBelman"}%
-%META:FIELD{name="Version" title="Version" value="%$VERSION%"}%
-%META:FIELD{name="Release" title="Release" value="%$RELEASE%"}%
-%META:FIELD{name="Copyright" value="%$CREATEDYEAR%, VadimBelman, All Rights Reserved"}%
-%META:FIELD{name="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
-%META:FIELD{name="Repository" value="https://github.com/foswiki/%$ROOTMODULE%"}%
-%META:FIELD{name="Home" value="http://foswiki.org/Extensions/%$ROOTMODULE%"}%
-%META:FIELD{name="Support" value="http://foswiki.org/Support/%$ROOTMODULE%"}%
+%META:FIELD{name="Version" title="Version" value="%25$VERSION%25"}%
+%META:FIELD{name="Release" title="Release" value="%25$RELEASE%25"}%
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/distro"}%
+%META:FIELD{name="Copyright" title="Copyright" value="%25$CREATEDYEAR%25, VadimBelman, All Rights Reserved"}%
+%META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
+%META:FIELD{name="Home" title="Home" value="http://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
+%META:FIELD{name="Support" title="Support" value="http://foswiki.org/Support/%25$ROOTMODULE%25"}%

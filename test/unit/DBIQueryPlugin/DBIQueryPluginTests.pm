@@ -37,18 +37,12 @@ sub set_up {
 
     $this->assert(
         Foswiki::Func::addUserToGroup(
-            $this->{session}{user},
-            'AdminGroup', 1
+            $this->{session}{user}, 'AdminGroup', 1
         ),
         "Failed to make $this->{session}{user} a new admin"
     );
-    $this->assert(
-        Foswiki::Func::addUserToGroup(
-            'ScumBag',
-            'AdminGroup', 0
-        ),
-        'Failed to make ScumBag a new admin'
-    );
+    $this->assert( Foswiki::Func::addUserToGroup( 'ScumBag', 'AdminGroup', 0 ),
+        'Failed to make ScumBag a new admin' );
 
 =pod
     $this->assert(
@@ -56,6 +50,7 @@ sub set_up {
         "Copy of $this->{msg_board_sqlite} to $temp_dir: $!"
     );
 =cut
+
 }
 
 sub tear_down {
@@ -74,16 +69,18 @@ sub loadExtraConfig {
     #say STDERR "SUPER::loadExtraConfig";
 
     $this->SUPER::loadExtraConfig();
+
     #say STDERR "loadExtraConfig";
 
-    $this->{db_test_dir} = File::Temp->newdir('dbiqp_tempXXXX');
-    $this->{db_msgb_file} = 'message_board_test.sqlite';
+    $this->{db_test_dir}   = File::Temp->newdir('dbiqp_tempXXXX');
+    $this->{db_msgb_file}  = 'message_board_test.sqlite';
     $this->{do_test_topic} = "Do" . $this->{test_topic};
 
-    $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Enabled} = 1;
-    $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug} = 0;
+    $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Enabled}      = 1;
+    $Foswiki::cfg{Plugins}{DBIQueryPlugin}{Debug}        = 0;
     $Foswiki::cfg{Plugins}{DBIQueryPlugin}{ConsoleDebug} = 0;
-    $Foswiki::cfg{PluginsOrder} = 'TWikiCompatibilityPlugin,DBIQueryPlugin,SpreadSheetPlugin,SlideShowPlugin';
+    $Foswiki::cfg{PluginsOrder} =
+'TWikiCompatibilityPlugin,DBIQueryPlugin,SpreadSheetPlugin,SlideShowPlugin';
 
     $Foswiki::cfg{Contrib}{DatabaseContrib}{dieOnFailure}   = 0;
     $Foswiki::cfg{Extensions}{DatabaseContrib}{connections} = {
@@ -101,7 +98,8 @@ sub loadExtraConfig {
                 "$this->{test_web}.$this->{do_test_topic}" => [qw(AdminGroup)],
             },
             allow_query => {
-                "$this->{test_web}.$this->{test_topic}" => [qw(TestGroup AdminGroup)],
+                "$this->{test_web}.$this->{test_topic}" =>
+                  [qw(TestGroup AdminGroup)],
             },
             usermap => {
                 DummyGroup => {
@@ -119,50 +117,51 @@ sub loadExtraConfig {
             driver_attributes => { sqlite_unicode => 1, },
         },
         msg_board_sqlite => {
-            driver            => 'SQLite',
-            database          => $this->{db_test_dir}->dirname . "/" . $this->{db_msgb_file},
+            driver   => 'SQLite',
+            database => $this->{db_test_dir}->dirname . "/"
+              . $this->{db_msgb_file},
             codepage          => 'utf8',
             driver_attributes => { sqlite_unicode => 1, },
         },
     };
 }
 
-sub expand_source
-{
+sub expand_source {
     my $tt = $_[0]->{test_topicObject};
-    return $tt->renderTML($tt->expandMacros($_[1]));
+    return $tt->renderTML( $tt->expandMacros( $_[1] ) );
 }
 
 sub test_self {
     my $this = shift;
 }
 
-sub test_version
-{
-    my $this = shift;
+sub test_version {
+    my $this       = shift;
     my $test_topic = $this->{test_topicObject};
 
     my $v_topic = '%DBI_VERSION%';
 
     my $v_html = $this->expand_source($v_topic);
-    $this->assert_html_equals( $v_html, "$Foswiki::Plugins::DBIQueryPlugin::VERSION", "\%DBI_VERSION\% output mismatch" );
+    $this->assert_html_equals(
+        $v_html,
+        "$Foswiki::Plugins::DBIQueryPlugin::VERSION",
+        "\%DBI_VERSION\% output mismatch"
+    );
 }
 
-sub test_query
-{
+sub test_query {
     my $this = shift;
 
-    #my $request = Unit::Request->new();
-    #say STDERR "Before new session: ", $this->{test_web}, ".", $this->{test_topic};
-    #my $session = $this->createNewFoswikiSession( 'ScumBag', $request );
-    #say STDERR "After new session: ", $this->{test_web}, ".", $this->{test_topic};
+#my $request = Unit::Request->new();
+#say STDERR "Before new session: ", $this->{test_web}, ".", $this->{test_topic};
+#my $session = $this->createNewFoswikiSession( 'ScumBag', $request );
+#say STDERR "After new session: ", $this->{test_web}, ".", $this->{test_topic};
 
-    #my $test_topic = Foswiki::Meta->new( $session, $this->{test_web}, $this->{test_topic} );
+#my $test_topic = Foswiki::Meta->new( $session, $this->{test_web}, $this->{test_topic} );
 
     #say STDERR Dumper($Foswiki::cfg{Extensions}{DatabaseContrib}{connections});
 
     my $test_topic = $this->{test_topicObject};
-
 
     my $q_topic = <<TSRC;
 %DBI_QUERY{"mock_connection"}%
@@ -174,13 +173,14 @@ SELECT col1, col2 FROM test_table
 %DBI_QUERY%
 TSRC
 
-    #say STDERR "1. this topic object: ", $session->{user}, "@", $test_topic->web, ".", $test_topic->topic;
-    #say STDERR "expandMacros";
-    my $q_html = $test_topic->renderTML( $test_topic->expandMacros( $q_topic ));
+#say STDERR "1. this topic object: ", $session->{user}, "@", $test_topic->web, ".", $test_topic->topic;
+#say STDERR "expandMacros";
+    my $q_html = $test_topic->renderTML( $test_topic->expandMacros($q_topic) );
+
     #say STDERR "HTML:\n", $q_html;
 
-    $this->assert_html_equals(
-        $q_html, <<QHTML, "\%DBI_QUERY\% output mismatch" );
+    $this->assert_html_equals( $q_html,
+        <<QHTML, "\%DBI_QUERY\% output mismatch" );
 <nop>
 <table border="1" class="foswikiTable" rules="none">
 <thead>
@@ -198,8 +198,7 @@ TSRC
 QHTML
 }
 
-sub test_code
-{
+sub test_code {
     my $this = shift;
 
     my $c_topic = <<TSRC;
@@ -208,10 +207,11 @@ print 'It works!';
 %DBI_CODE%
 TSRC
 
-    my $c_html = $this->expand_source( $c_topic );
+    my $c_html = $this->expand_source($c_topic);
+
     #say STDERR "c_html: $c_html";
-    $this->assert_html_equals(
-        $c_html, <<CHTML, "\%DBI_CODE\% output mismatch" );
+    $this->assert_html_equals( $c_html,
+        <<CHTML, "\%DBI_CODE\% output mismatch" );
 <table width="100%" border="0" cellspacing="5px">
     <tr>
         <td nowrap> <strong>Script name</strong> </td>
@@ -227,8 +227,7 @@ TSRC
 CHTML
 }
 
-sub test_subquery
-{
+sub test_subquery {
     my $this = shift;
 
     my $s_topic = <<TSRC;
@@ -243,10 +242,11 @@ SELECT f1, f2 FROM test_table
 TSRC
 
     my $s_html = $this->expand_source($s_topic);
+
     #say STDERR "s_html: $s_html";
 
-    $this->assert_html_equals(
-        $s_html, <<SHTML, "\%DBI_CALL\% output mismatch" );
+    $this->assert_html_equals( $s_html,
+        <<SHTML, "\%DBI_CALL\% output mismatch" );
 <nop>
 <table border="1" class="foswikiTable" rules="none">
     <thead>
@@ -264,8 +264,7 @@ TSRC
 SHTML
 }
 
-sub test_do
-{
+sub test_do {
     my $this = shift;
 
     my $d_topic = <<TSRC;

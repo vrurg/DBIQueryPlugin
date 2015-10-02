@@ -1,0 +1,144 @@
+| 2015-09-29T00:43:41+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-09-29T00:43:41+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-09-29T00:43:41+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-09-29T00:43:41+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-09-29T00:43:41+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-09-29T00:43:41+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-09-29T00:43:41+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:41+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-09-29T00:43:42+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-09-29T00:43:42+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-09-29T00:43:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-09-29T00:43:42+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-09-29T00:43:42+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-09-29T00:43:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-09-29T00:43:42+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-09-29T00:43:42+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-09-29T00:43:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-09-29T00:43:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-09-29T00:43:42+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-09-29T00:43:42+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-09-29T00:43:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:43+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-09-29T00:43:43+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-09-29T00:43:43+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-09-29T00:43:43+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-09-29T00:43:43+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-09-29T00:43:43+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-09-29T00:43:43+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-09-29T00:43:43+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:14+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T00:59:14+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T00:59:14+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T00:59:14+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T00:59:14+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T00:59:15+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T00:59:15+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:15+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T00:59:15+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T00:59:15+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T00:59:15+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:15+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T00:59:15+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T00:59:15+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T00:59:15+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:15+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T00:59:15+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T00:59:16+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T00:59:16+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T00:59:16+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:16+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:16+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T00:59:16+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T00:59:16+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T00:59:16+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T00:59:16+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T00:59:16+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T00:59:16+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:16+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:16+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T00:59:16+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T00:59:16+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T00:59:16+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T00:59:16+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T00:59:16+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T00:59:16+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T00:59:16+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:41+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T01:17:41+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T01:17:41+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T01:17:41+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T01:17:41+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T01:17:42+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T01:17:42+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T01:17:42+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T01:17:42+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T01:17:42+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T01:17:42+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T01:17:42+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T01:17:42+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T01:17:42+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T01:17:42+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:42+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:43+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.WebPreferences |  |  |
+| 2015-10-03T01:17:43+03:00 info | guest | save | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests |  |  |
+| 2015-10-03T01:17:43+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WebPreferences |  |  |
+| 2015-10-03T01:17:43+03:00 info | guest | save | TemporaryDBIQueryPluginTestsUsersWeb.WikiUsers |  |  |
+| 2015-10-03T01:17:43+03:00 info | RegistrationAgent | save | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag |  |  |
+| 2015-10-03T01:17:43+03:00 info | ScumBag | register | TemporaryDBIQueryPluginTestsUsersWeb.ScumBag | scumbag@example.com (scum) |  |
+| 2015-10-03T01:17:43+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: WikiGuest added by BaseUserMapping_666 |  |
+| 2015-10-03T01:17:43+03:00 info | guest | addUserToGroup | TemporaryDBIQueryPluginTestsTestWebDBIQueryPluginTests.TestTopicDBIQueryPluginTests | AdminGroup: ScumBag added by BaseUserMapping_666 |  |

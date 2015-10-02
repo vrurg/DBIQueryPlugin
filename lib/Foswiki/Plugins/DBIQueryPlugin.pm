@@ -13,7 +13,7 @@ use DBI;
 use Error qw(:try);
 use CGI qw(:html2);
 use Carp qw(longmess);
-use Foswiki::Contrib::DatabaseContrib;
+use Foswiki::Contrib::DatabaseContrib qw(:all);
 
 # $VERSION is referred to by Foswiki, and is the only global variable that
 # *must* exist in this package. For best compatibility, the simple quoted decimal
@@ -68,7 +68,12 @@ my ( $topic, $web, $user, $installWeb, %queries, %subquery_map );
 sub message_prefix {
     my @call = caller(2);
     my $line = ( caller(1) )[2];
-    return "- " . $call[3] . (defined $web && defined $topic ? "( $web.$topic )" : "( *uninitialized* )") . "\:$line ";
+    return
+        "- "
+      . $call[3]
+      . (    defined $web
+          && defined $topic ? "( $web.$topic )" : "( *uninitialized* )" )
+      . "\:$line ";
 }
 
 sub warning(@) {
@@ -211,7 +216,8 @@ sub storeDoQuery {
                 return wikiErrMsg(
                     "%<nop>DBI_DO% script name must be a valid identifier")
                   unless $params{script} =~ /^\w\w*$/;
-                if ( $content =~ /%DBI_CODE{"$params{script}"}%(.*?)%DBI_CODE%/s )
+                if ( $content =~
+                    /%DBI_CODE{"$params{script}"}%(.*?)%DBI_CODE%/s )
                 {
                     $content = $1;
                 }
@@ -254,7 +260,7 @@ sub storeQuery {
 
     $conname = $params{_DEFAULT};
 
-    %params  = query_params($param_str);
+    %params = query_params($param_str);
 
     #return wikiErrMsg("This DBI connection is not defined: $conname.")
     #  unless db_connected($conname);
@@ -379,9 +385,9 @@ sub getQueryResult {
     my $conname = $params->{_DEFAULT};
     $columns ||= {};
 
-    return wikiErrMsg(
-        "No access to query $conname DB at $web.$topic.")
-      unless defined($query->{call}) || db_access_allowed( $conname, "$web.$topic", 'allow_query' );
+    return wikiErrMsg("No access to query $conname DB at $web.$topic.")
+      unless defined( $query->{call} )
+      || db_access_allowed( $conname, "$web.$topic", 'allow_query' );
 
     if ( $query->{_nesting} >
         $Foswiki::cfg{Plugins}{DBIQueryPlugin}{maxRecursionLevel} )
@@ -471,16 +477,15 @@ sub getQueryResult {
 sub doQuery {
     my ( $qid, $columns ) = @_;
 
-    my $query  = $queries{$qid};
-    my $params = $query->{params} || {};
-    my $rc     = "";
+    my $query   = $queries{$qid};
+    my $params  = $query->{params} || {};
+    my $rc      = "";
     my $conname = $params->{_DEFAULT};
     $columns ||= {};
 
     dprint "doQuery()\n";
 
-    return wikiErrMsg(
-        "No access to modify $conname DB at $web.$topic.")
+    return wikiErrMsg("No access to modify $conname DB at $web.$topic.")
       unless db_access_allowed( $conname, "$web.$topic", 'allow_do' );
 
     my %multivalued;
@@ -489,9 +494,8 @@ sub doQuery {
     }
 
     # Preparing sub() code.
-    my $dbh = $query->{dbh} = db_connect( $conname );
-    throw Error::Simple(
-        "DBI connect error for connection " . $conname )
+    my $dbh = $query->{dbh} = db_connect($conname);
+    throw Error::Simple( "DBI connect error for connection " . $conname )
       unless $dbh;
     my $request = Foswiki::Func::getRequestObject();
     dprint( "REQUEST ACTIONS: ", $request->action, " thru ", $request->method );
@@ -634,7 +638,7 @@ FOOBARSOMETHING. This avoids namespace issues.
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
-    dprint "DBIQueryPlugin::initPlugin(", join(",", @_), ")";
+    dprint "DBIQueryPlugin::initPlugin(", join( ",", @_ ), ")";
 
     # check for Plugins.pm versions
     if ( $Foswiki::Plugins::VERSION < 2.3 ) {
@@ -854,7 +858,7 @@ Foswiki:Development.AddToZoneFromPluginHandlers if you are calling
 =cut
 
 sub commonTagsHandler {
-    (undef, $topic, $web) = @_;
+    ( undef, $topic, $web ) = @_;
 
     dprint("CommonTagsHandler( $_[2].$_[1] )");
     if ( $_[3] ) {    # We're being included
@@ -890,7 +894,7 @@ Foswiki:Development.AddToZoneFromPluginHandlers if you are calling
 =cut
 
 sub beforeCommonTagsHandler {
-    (undef, $topic, $web) = @_;
+    ( undef, $topic, $web ) = @_;
 
     dprint "Starting processing.";
 
