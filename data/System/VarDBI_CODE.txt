@@ -1,0 +1,19 @@
+%META:TOPICINFO{author="VadimBelman" date="1434650530" format="1.1" version="1"}%
+%META:TOPICPARENT{name="Macros"}%
+---+++ DBI_CODE -- storing a script for =%<nop>DBI_DO%=
+
+=%<nop>DBI_CODE{...}%= is used for keeping several =%<nop>DBI_DO%= scripts
+within single topic. A script is kept between starting
+=%<nop>DBI_CODE{...}%= and ending =%<nop>DBI_CODE%=. Output is formatted as
+a table representing script's name and code.
+
+---++++ Parameters
+
+|*Parameter*|*Description*|*Default*|*Required*|
+|"script_name"|Name of the script. Must be unique within topic.|_none_|required|
+
+%T% *Note:* Special support is provided for source highlighting plugins using =%<nop>CODE%= notation.
+
+%STOPINCLUDE%
+---++ Related
+%SEARCH{"name=~'DBI_' AND name!='%TOPIC%'" type="query" format="   * [[$topic][$pattern(.*?---\++ ([^\n]*).*)]]" nonoise="on"}%

@@ -263,7 +263,7 @@ sub storeQuery {
 
     $queries{$qid}{params}     = \%params;
     $queries{$qid}{connection} = $conname;
-    $queries{$qid}{type}       = "query";
+    $queries{$qid}{type}       = 'query';
     $queries{$qid}{_nesting}   = 0;
 
     my $content_kwd = qr/\n\.(head(?:er)?|body|footer)\s*/s;

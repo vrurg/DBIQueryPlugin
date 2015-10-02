@@ -1,0 +1,33 @@
+%META:TOPICINFO{author="VadimBelman" date="1434650530" format="1.1" version="1"}%
+%META:TOPICPARENT{name="Macros"}%
+---+++ DBI_CALL -- directly call a subquery.
+
+=%<nop>DBI_CALL{...}%= directly calls a subquery and pass over optional named parameters simulating [[VarDBI_QUERY#DbiSubquery][=%<nop>DBI_SUBQUERY%=] call.
+
+---++++ Parameters
+
+|*Parameter*|*Description*|*Default*|*Required*|
+|"subquery"|Subquery to call.|_none_|required|
+
+Optional parameters are transfered to the subquery as if they are columns of a database record. Consider the following example:
+
+<pre>
+%<nop>DBI_CALL{"example" uid="12"}%
+
+%<nop>DBI_QUERY{"db_identifier" subquery="example"}%
+SELECT
+    name
+  FROM
+    Users
+  WHERE
+    id = %uid%
+.header
+....
+%DBI_QUERY%
+</pre>
+
+%I% Read more in [[DBIQueryPlugin#VariableExpansion][Variable Expansion]] section.
+
+%STOPINCLUDE%
+---++ Related
+%SEARCH{"name=~'DBI_' AND name!='%TOPIC%'" type="query" format="   * [[$topic][$pattern(.*?---\++ ([^\n]*).*)]]" nonoise="on"}%

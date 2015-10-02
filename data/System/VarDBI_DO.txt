@@ -1,0 +1,23 @@
+%META:TOPICINFO{author="VadimBelman" date="1434650530" format="1.1" version="1"}%
+%META:TOPICPARENT{name="Macros"}%
+---+++ DBI_DO -- do complex processing with Perl code.
+
+As a matter of fact, =%<nop>DBI_DO{...}%= is nothing but a Perl script
+stored withing %WIKITOOLNAME%. There are three ways to store it:
+
+   1. In place, just between starting =%<nop>DBI_DO{...}%= and ending =%<nop>DBI_DO%=.
+   1. Several scripts in a topic using [[VarDBI_CODE][=%<nop>DBI_CODE{...}%=]].
+
+---++++ Parameters
+
+|*Parameter*|*Description*|*Default*|*Required*|
+|"db_identifier"|Database ID as defined in DatabaseContrib configuration. See [[DatabaseContrib#DatabaseConfig][database configuration]] section.|_none_|required|
+|multivalued="par1 par2 ..."|Defines HTTP parameters expected to contain several values. These could be, for instance, either values from checkboxes or multiselection lists.|_none_|optional|
+|subquery="name"|Defines a subquery which does not produce immediate result but could be used from inside another query. See [[VarDBI_QUERY#DbiSubquery][=%<nop>DBI_SUBQUERY%=]] of [[VarDBI_QUERY][=%<nop>DBI_QUERY%=]]|_none_|optional|
+|topic="SomeTopic"|Topic to read script from.|_none_|optional|
+|script="name"|Specific script defined by its name from several stored in a topic.|_none_|optional|
+|name="do_name"|Informational parameter which defines in-place stored script name. Useful for debugging and error messages.|_none_|optional|
+
+%STOPINCLUDE%
+---++ Related
+%SEARCH{"name=~'DBI_' AND name!='%TOPIC%'" type="query" format="   * [[$topic][$pattern(.*?---\++ ([^\n]*).*)]]" nonoise="on"}%

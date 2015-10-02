@@ -1,10 +1,14 @@
 %META:TOPICINFO{author="VadimBelman" date="1434650530" format="1.1" version="1"}%
 %META:TOPICPARENT{name="Macros"}%
----+ DBI_QUERY -- example macro tag
-The =%<nop>DBI_QUERY%= variable is handled by the DBIQueryPlugin
+---+++ DBI_QUERY -- make simple requests to a database.
 
-Each query consist of two parts: a query statement (=SELECT=) and output formatting filters. SQL statement starts just after the leading =%<nop>DBI_QUERY{...}%= declaration. The filters are defined by =.header=, =.body=, and =.footer= keywords each starting at the beginning of line.  Their meaning shall be obvious from their name:
+Each query consist of two parts: a query statement (mostly is a =SELECT=
+statement) and output formatting filters. SQL statement starts just after
+the leading =%<nop>DBI_QUERY{...}%= declaration. The filters are defined by
+=.header=, =.body=, and =.footer= keywords each starting at the beginning
+of line.  Their meaning shall be obvious from their name:
 
+%TABLE{sort="off"}%
 |*Declaration*|*Description*|
 |=.header=|It is prepended to the query output once.|
 |=.body=|It is repeated for each row of data being fetched from the database.|
@@ -12,17 +16,28 @@ Each query consist of two parts: a query statement (=SELECT=) and output formatt
 
 Read more on how DBIQueryPlugin works in order to get more detailed explanation of the meaning of each syntax element.
 
----++ Parameters
+---++++ Parameters
 
 |*Parameter*|*Description*|*Default*|*Required*|
-|"db_identifier"|Database ID as defined in the plugin configuration. See [[#PluginConfig][plugin configuration]] section.|_none_|required|
-|subquery="name"|Defines a subquery which does not produce immediate result but could be used from inside another query|_none_|optional|
+|"db_identifier"|Database ID as defined in the plugin configuration. See [[DatabaseContrib#DatabaseConfig][DatabaseContrib configuration]] section.|_none_|required|
+|subquery="name"|Defines a subquery which does not produce immediate result but could be used from inside another query -- see [[#DbiSubquery][%<nop>DBI_SUBQUERY%]]|_none_|optional|
 |unquoted="col1 col2 ..."|List of columns to be left unquoted in the output. Read more in [[#ValueQuoting][Quoting of Values]] section.|_none_|optional|
 |protected="col1 col2 ..."|List of columns to be protected from processing by Foswiki engine.|_none_|optional|
 
-A small note on =protected= parameter. Say, one has an arbitrary data in a displayed column which could contain any kind of text strings. What happens if a %WIKITOOLNAME% variable is found in a string? It gets expanded by %WIKITOOLNAME%, for sure. Adding this columns to the =protected= list prevents the expansion. Precisely saying, the whole purpose of protection is displaying of data as is, without any modification.
+%I% A small note on =protected= parameter. Say, one has an arbitrary data
+in a displayed column which could contain any kind of text strings. What
+happens if such a string looks like a %WIKITOOLNAME% variable or macro? It's gonna be
+expaded for sure. Adding a column to the =protected= list makes data from
+this column displayed as is, unmodified.
 
----++ Examples
+#DbiSubquery
+---++++ DBI_SUBQUERY -- call a %<nop>DBI_XXX% subquery
+
+=%<nop>DBI_SUBQUERY{"name"}%= (aliased as =%<nop>DBI_EXEC%=) doesn't exist as a separate variable but only as a part of
+header/body/footer processing mechanism. It's functionality is described in [[DBIQueryPlugin#VariableExpansion][Variable Expansion]]
+and [[DBIQueryPlugin#Subqueries][Subqueries]] sections of DBIQueryPlugin documentation.
+
+---++++ Examples
 
 <pre>
 %<nop>DBI_QUERY{"db_identifier" ...}%
@@ -38,4 +53,4 @@ footer
 </pre>
 %STOPINCLUDE%
 ---++ Related
-DBIQueryPlugin
+%SEARCH{"name=~'DBI_' AND name!='%TOPIC%'" type="query" format="   * [[$topic][$pattern(.*?---\++ ([^\n]*).*)]]" nonoise="on"}%
