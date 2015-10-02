@@ -1,9 +1,5 @@
 %META:TOPICINFO{author="VadimBelman" comment="" date="1443825457" format="1.1" reprev="2" version="2"}%
 %META:TOPICPARENT{name="Plugins"}%
-<!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = %$SHORTDESCRIPTION%
--->
 ---+!! Empty Plugin
 
 %SHORTDESCRIPTION%
@@ -418,8 +414,10 @@ Additionally the following coniguration keys of ={Plugins}{DBIQueryPlugin}= conf
 |*Debug*  |  =false=|Generate additional debug output|
 |*maxRecursionLevel*  |  100|How many nested subquery calls of a same query are allowed before it's considered a too deep recursion|
 
-   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+<!--
+   * One line description
       * Set SHORTDESCRIPTION = Make complex database queries using DBI Perl module
+-->
 
 ---++ Installation
 %$INSTALL_INSTRUCTIONS%
